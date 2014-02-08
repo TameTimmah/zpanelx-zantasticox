@@ -39,4 +39,8 @@ class module_controller {
         return true;
     }
 
+    static function getMainView() {
+        return true;
+    }
+    
 }
