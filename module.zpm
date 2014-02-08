@@ -1,3 +1,48 @@
+<style>
+    #app_topbar form.form-inline input{
+        width:250px;
+    }
+
+    #app_topbar {
+        min-height:30px;
+    }
+
+    @media (max-width: 767px) {
+
+        #app_topbar select {
+            margin-bottom: 15px;
+        }
+
+        #app_topbar .pull-left, #app_topbar .pull-right {
+            float:none;
+        }
+
+        #app_topbar form.form-inline input{
+            width:100%;
+            max-width:250px;
+        }
+
+    }
+    
+    #app_mainview a {
+        display: inline-block;
+        text-align: center;
+        width:100px;
+        margin:5px;
+        padding:10px;
+        background-color:#f5f5f5;
+        border-radius: 4px;
+        border: 1px solid #DDD;
+    }
+    #app_mainview a h5 {
+        margin-bottom:0;
+    }
+    #app_mainview a h6 {
+        color:#666;
+        display:inline-block;
+        margin:0;
+    }
+</style>
 <div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
     <div class="panel-heading">
         <img src="<@ ModuleIcon @>" width="35" height="35" border="0" alt="<@ ModuleName @>">

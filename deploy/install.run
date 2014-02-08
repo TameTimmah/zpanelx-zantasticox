@@ -3,8 +3,8 @@ require_once '/etc/zpanel/panel/cnf/db.php';
 require_once '/etc/zpanel/panel/dryden/db/driver.class.php';
 
 try {
-    $database = new db_driver("mysql:host=$host;dbname=$dbname", $user, $pass);
-    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $zdbh = new db_driver("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $zdbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die($e);
 }
@@ -25,7 +25,7 @@ $apptable = "CREATE TABLE `x_ai_apps` (
 PRIMARY KEY (`ai_id`),
 UNIQUE KEY `ai_name` (`ai_name`,`ai_folder`)
 )";
-$database->bindQuery($apptable);
+$zdbh->bindQuery($apptable);
 
 // Create table for categories
 $categorytable = "CREATE TABLE `x_ai_categories` (
@@ -33,4 +33,4 @@ $categorytable = "CREATE TABLE `x_ai_categories` (
 `ai_desc` text NOT NULL,
 `ai_types` tinytext NOT NULL
 )";
-$database->bindQuery($categorytable);
+$zdbh->bindQuery($categorytable);

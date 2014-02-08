@@ -36,20 +36,41 @@ class module_controller {
     }
     
     static function getMainView() {
-        $html = "<h1>Main View!</h1>";
-        return $html;
+        global $zdbh;
+            $sql = "SELECT * FROM x_ai_categories";
+            if ($uid == 0) {
+                $sql = $zdbh->prepare($sql);
+            }else{
+                $sql = $zdbh->prepare($sql);
+                $sql->bindParam(':uid', $uid);
+            }
+            $res = array();
+            $sql->execute();
+            while ($rowdomains = $sql->fetch()) {
+                array_push($res, array(
+                    'ai_name' => $rowdomains['ai_name'],
+                    'ai_desc' => $rowdomains['ai_desc'],
+                    'directory' => $rowdomains['vh_directory_vc'],
+                    'active' => $rowdomains['vh_active_in'],
+                    'id' => $rowdomains['vh_id_pk'],
+                ));
+                $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
+                $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
+            }
+            return $html;
+
     }
     
     static function getAppView($id) {
         if($id==1){
-            $html = "<h1>App View!</h1>";
+            $html = '<h1>App View!</h1>';
         }
         return $html;
     }
     
-        static function getAppInstall($id) {
+    static function getAppInstall($id) {
         if($id==1){
-            $html = "<h1>App Installer View!</h1>";
+            $html = '<h1>App Installer View!</h1>';
         }
         return $html;
     }
@@ -57,8 +78,8 @@ class module_controller {
     // Handles frontend
     static function getModuleDisplay() {
         // Add GET contents to variables
-        $app = $_GET["app"];
-        $action = $_GET["action"];
+        $app = $_GET['app'];
+        $action = $_GET['action'];
         
         // Decide what should be displayed
         if($app==NULL & $action==NULL){
@@ -71,7 +92,7 @@ class module_controller {
             $html = module_controller::getAppInstall($app);
         }
         else{
-            $html = "<h1>ERROR</h1>";
+            $html = '<h1>Unknown Error Occurred</h1>';
         }
         return $html;
     }
