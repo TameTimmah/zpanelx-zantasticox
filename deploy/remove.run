@@ -9,6 +9,10 @@ try {
     die($e);
 }
 
-// Drop the table - deletes all rows
-$query = "DROP TABLE `x_ai_apps`";
-$database->bindQuery($query);
+// Drop the app table
+$apptable = "DROP TABLE `x_ai_apps`";
+$database->bindQuery($apptable);
+
+// Drop the category table
+$categorytable = "DROP TABLE `x_ai_categories`";
+$database->bindQuery($categorytable);

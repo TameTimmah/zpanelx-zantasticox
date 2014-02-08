@@ -10,7 +10,7 @@ try {
 }
 
 // Create table for apps
-$table = "CREATE TABLE IF NOT EXISTS `x_ai_apps` (
+$apptable = "CREATE TABLE `x_ai_apps` (
 `ai_id` smallint(6) NOT NULL AUTO_INCREMENT,
 `ai_name` varchar(32) NOT NULL,
 `ai_folder` varchar(32) NOT NULL,
@@ -25,4 +25,12 @@ $table = "CREATE TABLE IF NOT EXISTS `x_ai_apps` (
 PRIMARY KEY (`ai_id`),
 UNIQUE KEY `ai_name` (`ai_name`,`ai_folder`)
 )";
-$database->bindQuery($table);
+$database->bindQuery($apptable);
+
+// Create table for categories
+$categorytable = "CREATE TABLE `x_ai_categories` (
+`ai_name` varchar(32) NOT NULL,
+`ai_desc` text NOT NULL,
+`ai_types` tinytext NOT NULL
+)";
+$database->bindQuery($categorytable);
