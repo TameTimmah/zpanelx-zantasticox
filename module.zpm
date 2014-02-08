@@ -39,11 +39,13 @@
         <div id="app_topbar">
             <div class="pull-left">
                 <select class="form-control">
-                    <option><: All Apps :></option>
-                    <option><: Blogs :></option>
-                    <option><: CMSs :></option>
-                    <option><: Forums :></option>
-                    <option><: Wikis :></option>
+                    <option><: All Applications :></option>
+                    <option><: Community :></option>
+                    <option><: Content Management :></option>
+                    <option><: Business :></option>
+                    <option><: Files :></option>
+                    <option><: Surveys :></option>
+                    <option><: Other :></option>
                 </select>
             </div>
             <form class="pull-right form-inline" role="form">
