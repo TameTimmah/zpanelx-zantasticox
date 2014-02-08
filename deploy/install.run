@@ -1,1 +1,28 @@
 <?php
+require_once '/etc/zpanel/panel/cnf/db.php';
+require_once '/etc/zpanel/panel/dryden/db/driver.class.php';
+
+try {
+    $database = new db_driver("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die($e);
+}
+
+// Create table for apps
+$table = "CREATE TABLE IF NOT EXISTS `x_ai_apps` (
+`ai_id` smallint(6) NOT NULL AUTO_INCREMENT,
+`ai_name` varchar(32) NOT NULL,
+`ai_folder` varchar(32) NOT NULL,
+`ai_type` varchar(32) NOT NULL,
+`ai_size` smallint(6) NOT NULL,
+`ai_desc` text NOT NULL,
+`ai_site` tinytext NOT NULL,
+`ai_updated` date NOT NULL,
+`ai_db` tinyint(1) NOT NULL,
+`ai_version` decimal(10,0) NOT NULL,
+`ai_enabled` tinyint(1) NOT NULL,
+PRIMARY KEY (`ai_id`),
+UNIQUE KEY `ai_name` (`ai_name`,`ai_folder`)
+)";
+$database->bindQuery($table);
