@@ -1,0 +1,46 @@
+<div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
+    <div class="panel-heading">
+        <img src="<@ ModuleIcon @>" width="35" height="35" border="0" alt="<@ ModuleName @>">
+        <div class="zmodule_title">
+            <@ ModuleName @>
+        </div>
+        <div class="zmodule_desc" id="zmodule_desc_<@ ModuleName @>"><@ ModuleDesc @></div>
+    </div>
+
+    <div class="zform_wrapper">
+        <% if TopBar %>
+        <style>
+        #app_topbar form.form-inline{
+        float:right;
+        }
+
+        #app_topbar form.form-inline input{
+        width:250px;
+        }
+
+        #app_topbar {
+        min-height:30px;
+        }
+        </style>
+        <div id="app_topbar">
+            <div class="pull-left">
+                <select class="form-control">
+                    <option><: All Apps :></option>
+                    <option><: Blogs :></option>
+                    <option><: CMSs :></option>
+                    <option><: Forums :></option>
+                    <option><: Wikis :></option>
+                </select>
+            </div>
+            <form class="pull-right form-inline" role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="appsearch" placeholder="<: Search Apps :>">
+                    <button type="submit" class="btn btn-default"><: Search :></button>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <% endif %>
+    </div>
+
+</div>
