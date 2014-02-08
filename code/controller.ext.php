@@ -35,12 +35,136 @@ class module_controller {
         return $message;
     }
     
-    static function getTopBar() {
-        return true;
-    }
-
     static function getMainView() {
-        return true;
+        $html = "<h1>Main View!</h1>";
+        return $html;
     }
     
+    static function getAppView($id) {
+        if($id==1){
+            $html = "<h1>App View!</h1>";
+        }
+        return $html;
+    }
+    
+        static function getAppInstall($id) {
+        if($id==1){
+            $html = "<h1>App Installer View!</h1>";
+        }
+        return $html;
+    }
+    
+    // Handles frontend
+    static function getModuleDisplay() {
+        // Add GET contents to variables
+        $app = $_GET["app"];
+        $action = $_GET["action"];
+        
+        // Decide what should be displayed
+        if($app==NULL & $action==NULL){
+            $html = module_controller::getMainView();
+        }
+        elseif($app!=NULL & $action==NULL){
+            $html = module_controller::getAppView($app);
+        }
+        elseif($app!=NULL & $action=='install'){
+            $html = module_controller::getAppInstall($app);
+        }
+        else{
+            $html = "<h1>ERROR</h1>";
+        }
+        return $html;
+    }
+    
+    /*
+     * OLD SAMPLE CODE (for zpm frontend)
+     * You can safely delete this
+     * 
+        <% if TopBar %>
+        <style>
+            #app_topbar form.form-inline input{
+                width:250px;
+            }
+
+            #app_topbar {
+                min-height:30px;
+            }
+
+            @media (max-width: 767px) {
+                
+                #app_topbar select {
+                    margin-bottom: 15px;
+                }
+                
+                #app_topbar .pull-left, #app_topbar .pull-right {
+                    float:none;
+                }
+                
+                #app_topbar form.form-inline input{
+                    width:100%;
+                    max-width:250px;
+                }
+                
+            }
+        </style>
+        <div id="app_topbar">
+            <div class="pull-left">
+                <select class="form-control">
+                    <option><: All Applications :></option>
+                    <option><: Community :></option>
+                    <option><: Content Management :></option>
+                    <option><: Business :></option>
+                    <option><: Files :></option>
+                    <option><: Surveys :></option>
+                    <option><: Other :></option>
+                </select>
+            </div>
+            <form class="pull-right form-inline" role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="appsearch" placeholder="<: Search Apps :>">
+                    <button type="submit" class="btn btn-default"><: Search :></button>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <% endif %>
+        
+        <% if MainView %>
+        <style>
+            #app_mainview a {
+                display: inline-block;
+                text-align: center;
+                width:100px;
+                margin:5px;
+                padding:10px;
+                background-color:#f5f5f5;
+                border-radius: 4px;
+                border: 1px solid #DDD;
+            }
+            #app_mainview a h5 {
+                margin-bottom:0;
+            }
+            #app_mainview a h6 {
+                color:#666;
+                display:inline-block;
+                margin:0;
+            }
+        </style>
+        <div id="app_mainview">
+            <% loop Sections %>
+            <section>
+                <h3><~ section_name ~></h3>
+                <p><~ section_desc ~></p>
+                <% loop Apps %>
+                <a href="?module=app_installer&app=<~ app_folder ~>">
+                    <img src="modules/app_installer/apps/<~ app_folder ~>/smallicon.png" width="50" height="50" alt="<~ app_name ~>">
+                    <h5><~ app_name ~></h5>
+                    <h6><~ app_type ~></h6>
+                </a>
+                <% endloop %>
+            </section>
+            <% endloop %>
+        </div>
+        <% endif %>
+     */
 }
