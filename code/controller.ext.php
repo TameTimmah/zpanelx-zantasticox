@@ -50,7 +50,7 @@ class module_controller {
             $sql2 = $zdbh->prepare($query2);
             $sql2->execute();
             while ($rowdomains2 = $sql2->fetch()) {
-                $foldername = strtolower($rowdomains2['ai_folder']);
+                $foldername = strtolower($rowdomains2['ai_name']);
                 $html .= '<a href="?module=app_installer&app='.$foldername.'">
                     <img src="modules/app_installer/apps/'.$foldername.'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                     <h5>'.$rowdomains2['ai_name'].'</h5>
