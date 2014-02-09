@@ -59,9 +59,8 @@ class module_controller {
             
             // For every app in category
             while ($rowdomains2 = $sql2->fetch()) {
-                $foldername = strtolower($rowdomains2['ai_name']);
-                $html .= '<a href="?module=app_installer&app='.$foldername.'">
-                    <img src="modules/app_installer/apps/'.$foldername.'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
+                $html .= '<a href="?module=app_installer&app='.$rowdomains2['ai_id'].'">
+                    <img src="modules/app_installer/apps/'.strtolower($rowdomains2['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                     <h5>'.$rowdomains2['ai_name'].'</h5>
                     <h6>'.$rowdomains2['ai_type'].'</h6>
                 </a>';
@@ -73,8 +72,16 @@ class module_controller {
     
     // Display information about app
     static function getAppView($id) {
-        if($id==1){
-            $html = '<h1>App View!</h1>';
+        global $zdbh;
+        
+        // Get app information
+        $query = "SELECT * FROM x_ai_apps WHERE ai_id = $id";
+        $sql = $zdbh->prepare($query);
+        $sql->execute();
+        
+        // Display app information
+        while ($rowdomains = $sql->fetch()) {
+            $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
         }
         return $html;
     }
