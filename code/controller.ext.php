@@ -37,28 +37,14 @@ class module_controller {
     
     static function getMainView() {
         global $zdbh;
-            $sql = "SELECT * FROM x_ai_categories";
-            if ($uid == 0) {
-                $sql = $zdbh->prepare($sql);
-            }else{
-                $sql = $zdbh->prepare($sql);
-                $sql->bindParam(':uid', $uid);
-            }
-            $res = array();
-            $sql->execute();
-            while ($rowdomains = $sql->fetch()) {
-                array_push($res, array(
-                    'ai_name' => $rowdomains['ai_name'],
-                    'ai_desc' => $rowdomains['ai_desc'],
-                    'directory' => $rowdomains['vh_directory_vc'],
-                    'active' => $rowdomains['vh_active_in'],
-                    'id' => $rowdomains['vh_id_pk'],
-                ));
-                $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
-                $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
-            }
-            return $html;
-
+        $query = "SELECT * FROM x_ai_categories";
+        $sql = $zdbh->prepare($query);
+        $sql->execute();
+        while ($rowdomains = $sql->fetch()) {
+            $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
+            $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
+        }
+        return $html;
     }
     
     static function getAppView($id) {
