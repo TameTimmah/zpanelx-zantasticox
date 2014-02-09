@@ -24,7 +24,7 @@
 
     }
     
-    #app_mainview a {
+    section.mainview a {
         display: inline-block;
         text-align: center;
         width:100px;
@@ -34,10 +34,10 @@
         border-radius: 4px;
         border: 1px solid #DDD;
     }
-    #app_mainview a h5 {
+    section.mainview a h5 {
         margin-bottom:0;
     }
-    #app_mainview a h6 {
+    section.mainview a h6 {
         color:#666;
         display:inline-block;
         margin:0;
