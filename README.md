@@ -1,7 +1,7 @@
 App Installer
 =============
 
-App Installer module for ZPanelX, open sourced under GPL v3.
+App Installer module for ZPanelX, open sourced under GPLv3 or any later version.
 
 I'm working purely on the frontend at the moment.
 
