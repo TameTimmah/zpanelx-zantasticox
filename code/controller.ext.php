@@ -105,6 +105,11 @@ class module_controller {
         
         // Display app information
         while ($rowdomains = $sql->fetch()) {
+            if($rowdomains['ai_db'] == 1){
+            $db_required = 'Required';
+            }else{
+            $db_required = 'Not Required';
+            }
             $html .= '
                     <div id="app_topbar">
                         <div class="pull-left">
@@ -122,7 +127,35 @@ class module_controller {
                         <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
                         <h3>'.$rowdomains['ai_name'].'</h3>
                         <p>'.$rowdomains['ai_desc'].'</p>
-                    </div>';
+                    </div>
+                    
+                    <div class="text-center" id="app_buttons">
+                        <a href="'.$rowdomains['ai_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
+                        <a href="#TODO-install" class="btn btn-primary">Install Application</a>
+                    </div>
+                    
+                    <table class="table" id="app_details">
+                        <thead>
+                            <tr>
+                                <th>Application</th>
+                                <th>Type</th>
+                                <th>Version</th>
+                                <th>Last Updated</th>
+                                <th>Database</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>'.$rowdomains['ai_name'].'</td>
+                                <td>'.$rowdomains['ai_type'].'</td>
+                                <td>'.$rowdomains['ai_version'].'</td>
+                                <td>'.$rowdomains['ai_updated'].'</td>
+                                <td>'.$db_required.'</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+            ';
         }
         return $html;
     }
