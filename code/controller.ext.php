@@ -50,8 +50,9 @@ class module_controller {
             $sql2 = $zdbh->prepare($query2);
             $sql2->execute();
             while ($rowdomains2 = $sql2->fetch()) {
-                $html .= '<a href="?module=app_installer&app='.$rowdomains2['ai_folder'].'">
-                    <img src="modules/app_installer/apps/'.$rowdomains2['ai_folder'].'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
+                $foldername = strtolower($rowdomains2['ai_folder']);
+                $html .= '<a href="?module=app_installer&app='.$foldername.'">
+                    <img src="modules/app_installer/apps/'.$foldername.'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                     <h5>'.$rowdomains2['ai_name'].'</h5>
                     <h6>'.$rowdomains2['ai_type'].'</h6>
                 </a>';
