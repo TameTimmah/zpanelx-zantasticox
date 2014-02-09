@@ -85,25 +85,30 @@ class module_controller {
         return $html;
     }
     
+    static function get404() {
+        header("HTTP/1.0 404 Not Found");
+        $html = '<h1>404 Not Found</h1>';
+        return $html;
+    }
+    
     // Handles frontend
     static function getModuleDisplay() {
         // Add GET contents to variables
         $app = $_GET['app'];
-        $action = $_GET['action'];
+        $act = $_GET['act'];
         
         // Decide what should be displayed
         if($app==NULL & $action==NULL){
             $html = module_controller::getMainView();
         }
-        elseif($app!=NULL & $action==NULL){
+        elseif($app!=NULL & $act==NULL){
             $html = module_controller::getAppView($app);
         }
-        elseif($app!=NULL & $action=='install'){
+        elseif($app!=NULL & $act=='install'){
             $html = module_controller::getAppInstall($app);
         }
         else{
-            header("HTTP/1.0 404 Not Found");
-            $html = '<h1>404 Not Found</h1>';
+            $html = module_controller::get404();
         }
         return $html;
     }
