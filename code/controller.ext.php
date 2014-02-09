@@ -35,7 +35,7 @@ class module_controller {
         return $message;
     }
     
-    // Main View (List of Apps)
+    // Display list of apps
     static function getMainView() {
         global $zdbh;
         
@@ -71,6 +71,7 @@ class module_controller {
         return $html;
     }
     
+    // Display information about app
     static function getAppView($id) {
         if($id==1){
             $html = '<h1>App View!</h1>';
@@ -78,6 +79,7 @@ class module_controller {
         return $html;
     }
     
+    // Display installer page for app
     static function getAppInstall($id) {
         if($id==1){
             $html = '<h1>App Installer View!</h1>';
@@ -85,13 +87,14 @@ class module_controller {
         return $html;
     }
     
+    // Display 404 error
     static function get404() {
         header("HTTP/1.0 404 Not Found");
         $html = '<h1>404 Not Found</h1>';
         return $html;
     }
     
-    // Handles frontend
+    // Handles what is displayed
     static function getModuleDisplay() {
         // Add GET contents to variables
         $app = $_GET['app'];
