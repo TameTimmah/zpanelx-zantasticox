@@ -119,9 +119,9 @@ class module_controller {
                     </div>
                     <hr>
                     <div id="app_summary">
-                    <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
-                    <h3>'.$rowdomains['ai_name'].'</h3>
-                    <p>'.$rowdomains['ai_desc'].'</p>
+                        <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
+                        <h3>'.$rowdomains['ai_name'].'</h3>
+                        <p>'.$rowdomains['ai_desc'].'</p>
                     </div>';
         }
         return $html;
@@ -164,57 +164,4 @@ class module_controller {
         return $html;
     }
     
-    /*
-     * OLD SAMPLE CODE (for zpm frontend)
-     * You can safely delete this
-     * 
-        <% if TopBar %>
-        <style>
-            #app_topbar form.form-inline input{
-                width:250px;
-            }
-
-            #app_topbar {
-                min-height:30px;
-            }
-
-            @media (max-width: 767px) {
-                
-                #app_topbar select {
-                    margin-bottom: 15px;
-                }
-                
-                #app_topbar .pull-left, #app_topbar .pull-right {
-                    float:none;
-                }
-                
-                #app_topbar form.form-inline input{
-                    width:100%;
-                    max-width:250px;
-                }
-                
-            }
-        </style>
-        <div id="app_topbar">
-            <div class="pull-left">
-                <select class="form-control">
-                    <option><: All Applications :></option>
-                    <option><: Community :></option>
-                    <option><: Content Management :></option>
-                    <option><: Business :></option>
-                    <option><: Files :></option>
-                    <option><: Surveys :></option>
-                    <option><: Other :></option>
-                </select>
-            </div>
-            <form class="pull-right form-inline" role="form">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="appsearch" placeholder="<: Search Apps :>">
-                    <button type="submit" class="btn btn-default"><: Search :></button>
-                </div>
-            </form>
-        </div>
-        <hr>
-        <% endif %>
-     */
 }
