@@ -41,8 +41,22 @@ class module_controller {
         $sql = $zdbh->prepare($query);
         $sql->execute();
         while ($rowdomains = $sql->fetch()) {
+            $html .= '<section class="mainview">';
             $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
             $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
+            $types = unserialize($rowdomains['ai_types']);
+            $ids = "'". implode("', '", $types) ."'";
+            $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
+            $sql2 = $zdbh->prepare($query2);
+            $sql2->execute();
+            while ($rowdomains2 = $sql2->fetch()) {
+                $html .= '<a href="?module=app_installer&app='.$rowdomains2['ai_folder'].'">
+                    <img src="modules/app_installer/apps/'.$rowdomains2['ai_folder'].'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
+                    <h5>'.$rowdomains2['ai_name'].'</h5>
+                    <h6>'.$rowdomains2['ai_type'].'</h6>
+                </a>';
+            }
+            $html .= '</section">';
         }
         return $html;
     }
