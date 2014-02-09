@@ -23,7 +23,7 @@
         }
 
     }
-    
+
     section.mainview a {
         display: inline-block;
         text-align: center;
@@ -34,27 +34,31 @@
         border-radius: 4px;
         border: 1px solid #DDD;
     }
+    
     section.mainview a h5 {
         margin-bottom:0;
     }
+    
     section.mainview a h6 {
         color:#666;
         display:inline-block;
         margin:0;
     }
-    
+
     @media (min-width: 768px) {
-    #app_summary {
-        min-height:100px;
-    }
         
-    #app_summary img {
-        float:left;
-    }
-    
-    #app_summary h3,  #app_summary p {
-        margin-left:115px;
-    }
+        #app_summary {
+            min-height:100px;
+        }
+
+        #app_summary img {
+            float:left;
+        }
+
+        #app_summary h3,  #app_summary p {
+            margin-left:115px;
+        }
+        
     }
 </style>
 <div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
