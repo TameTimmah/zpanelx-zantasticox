@@ -93,7 +93,8 @@ class module_controller {
             $html = module_controller::getAppInstall($app);
         }
         else{
-            $html = '<h1>Unknown Error Occurred</h1>';
+            header("HTTP/1.0 404 Not Found");
+            $html = '<h1>404 Not Found</h1>';
         }
         return $html;
     }
