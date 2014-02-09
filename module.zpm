@@ -44,6 +44,10 @@
     }
     
     @media (min-width: 768px) {
+    #app_summary {
+        min-height:100px;
+    }
+        
     #app_summary img {
         float:left;
     }
