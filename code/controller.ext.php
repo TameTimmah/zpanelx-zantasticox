@@ -44,7 +44,7 @@ class module_controller {
             $html .= '<section class="mainview">';
             $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
             $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
-            $types = unserialize($rowdomains['ai_types']);
+            $types = unserialize(base64_decode($rowdomains['ai_types']));
             $ids = "'". implode("', '", $types) ."'";
             $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
             $sql2 = $zdbh->prepare($query2);
