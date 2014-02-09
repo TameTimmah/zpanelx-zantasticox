@@ -35,20 +35,29 @@ class module_controller {
         return $message;
     }
     
+    // Main View (List of Apps)
     static function getMainView() {
         global $zdbh;
+        
+        // Get categories
         $query = "SELECT * FROM x_ai_categories";
         $sql = $zdbh->prepare($query);
         $sql->execute();
+        
+        // For every category
         while ($rowdomains = $sql->fetch()) {
             $html .= '<section class="mainview">';
             $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
             $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
+            
+            // Get apps in category
             $types = unserialize(base64_decode($rowdomains['ai_types']));
             $ids = "'". implode("', '", $types) ."'";
             $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
             $sql2 = $zdbh->prepare($query2);
             $sql2->execute();
+            
+            // For every app in category
             while ($rowdomains2 = $sql2->fetch()) {
                 $foldername = strtolower($rowdomains2['ai_name']);
                 $html .= '<a href="?module=app_installer&app='.$foldername.'">
