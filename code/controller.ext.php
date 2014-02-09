@@ -160,43 +160,5 @@ class module_controller {
         </div>
         <hr>
         <% endif %>
-        
-        <% if MainView %>
-        <style>
-            #app_mainview a {
-                display: inline-block;
-                text-align: center;
-                width:100px;
-                margin:5px;
-                padding:10px;
-                background-color:#f5f5f5;
-                border-radius: 4px;
-                border: 1px solid #DDD;
-            }
-            #app_mainview a h5 {
-                margin-bottom:0;
-            }
-            #app_mainview a h6 {
-                color:#666;
-                display:inline-block;
-                margin:0;
-            }
-        </style>
-        <div id="app_mainview">
-            <% loop Sections %>
-            <section>
-                <h3><~ section_name ~></h3>
-                <p><~ section_desc ~></p>
-                <% loop Apps %>
-                <a href="?module=app_installer&app=<~ app_folder ~>">
-                    <img src="modules/app_installer/apps/<~ app_folder ~>/smallicon.png" width="50" height="50" alt="<~ app_name ~>">
-                    <h5><~ app_name ~></h5>
-                    <h6><~ app_type ~></h6>
-                </a>
-                <% endloop %>
-            </section>
-            <% endloop %>
-        </div>
-        <% endif %>
      */
 }
