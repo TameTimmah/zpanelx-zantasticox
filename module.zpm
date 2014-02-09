@@ -42,6 +42,16 @@
         display:inline-block;
         margin:0;
     }
+    
+    @media (min-width: 768px) {
+    #app_summary img {
+        float:left;
+    }
+    
+    #app_summary h3,  #app_summary p {
+        margin-left:115px;
+    }
+    }
 </style>
 <div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
     <div class="panel-heading">
