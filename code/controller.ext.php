@@ -39,6 +39,30 @@ class module_controller {
     static function getMainView() {
         global $zdbh;
         
+        // Display top bar
+        $html .= '
+            <div id="app_topbar">
+                <div class="pull-left">
+                    <select class="form-control">
+                        <option>All Applications</option>
+                        <option>Community</option>
+                        <option>Content Management</option>
+                        <option>Business</option>
+                        <option>Files</option>
+                        <option>Surveys</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <form class="pull-right form-inline" role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="appsearch" placeholder="Search Apps">
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </div>
+                </form>
+            </div>
+            <hr>
+        ';
+        
         // Get categories
         $query = "SELECT * FROM x_ai_categories";
         $sql = $zdbh->prepare($query);
@@ -82,13 +106,23 @@ class module_controller {
         // Display app information
         while ($rowdomains = $sql->fetch()) {
             $html .= '
-                     <div id="app_summary">
-                     <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
-                     <h3>'.$rowdomains['ai_name'].'</h3>
-                     
-                     
-                     <p>'.$rowdomains['ai_desc'].'</p>
-                     </div>';
+                    <div id="app_topbar">
+                        <div class="pull-left">
+                            <a href="?module=app_installer" class="btn btn-default">Return to list</a>
+                        </div>
+                        <form class="pull-right form-inline" role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="appsearch" placeholder="Search Apps">
+                                <button type="submit" class="btn btn-default">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div id="app_summary">
+                    <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
+                    <h3>'.$rowdomains['ai_name'].'</h3>
+                    <p>'.$rowdomains['ai_desc'].'</p>
+                    </div>';
         }
         return $html;
     }
