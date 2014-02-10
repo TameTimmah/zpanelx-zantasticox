@@ -161,9 +161,20 @@ class module_controller {
     }
     
     // Display installer page for app
-    static function getAppInstall($id) {
-        if($id==1){
-            $html = '<h1>App Installer View!</h1>';
+    static function getAppInstall($app_name) {
+        global $zdbh;
+        
+        // Get app information
+        $query = "SELECT * FROM x_ai_apps WHERE ai_name = '$app_name'";
+        $sql = $zdbh->prepare($query);
+        $sql->execute();
+        
+        // Display app installer
+        while ($rowdomains = $sql->fetch()) {
+            $html .= '
+                <h3>This is the installer for '.$rowdomains['ai_name'].'.</h3>
+                <p>This module is under development and thus this page isn&apos;t functioning yet...</p>
+            ';
         }
         return $html;
     }
