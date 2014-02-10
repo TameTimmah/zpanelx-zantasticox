@@ -131,7 +131,7 @@ class module_controller {
                     
                     <div class="text-center" id="app_buttons">
                         <a href="'.$rowdomains['ai_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
-                        <a href="#TODO-install" class="btn btn-primary">Install Application</a>
+                        <a href="?module=app_installer&app='.strtolower($rowdomains['ai_name']).'&act=install" class="btn btn-primary">Install Application</a>
                     </div>
                     
                     <table class="table" id="app_details">
