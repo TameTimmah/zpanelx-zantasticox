@@ -7,7 +7,7 @@ It is open source, licensed under GPLv3 or any later version.
 
 ### Development Status
 
-Currently 'App Installer' is not a fully function module.
+Currently 'App Installer' is not a fully functioning module.
 
 The frontend is almost complete, and I will soon be getting down to all the nitty gritty code.
 
