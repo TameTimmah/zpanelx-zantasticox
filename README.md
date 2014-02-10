@@ -1,8 +1,14 @@
 App Installer
 =============
 
-App Installer module for ZPanelX, open sourced under GPLv3 or any later version.
+'App Installer' is a module for [ZPanelX](http://www.zpanelcp.com/) which lets users install a range of web applications such as WordPress and Joomla.
 
-I'm working purely on the frontend at the moment.
+It is open source, licensed under GPLv3 or any later version.
 
-Currently in development and not production ready!!!
+### Development Status
+
+Currently 'App Installer' is not a fully function module.
+
+The frontend is almost complete, and I will soon be getting down to all the nitty gritty code.
+
+Your welcome to make a pull request to help me out :wink:
