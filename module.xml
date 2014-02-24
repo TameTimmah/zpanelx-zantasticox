@@ -3,7 +3,7 @@
     <name>App Installer</name>
     <version>100</version>
     <defaultcat>File Management</defaultcat>
-    <desc>Easily install web applications, like WordPress and Joomla, into your webspace.</desc>
+    <desc>Easily install web applications, such as WordPress and Joomla, into your webspace.</desc>
     <authorname>Jacob Gelling</authorname>
     <authoremail>jacobgelling@hawkservers.com</authoremail>
     <authorurl>http://hawkservers.com/</authorurl>
