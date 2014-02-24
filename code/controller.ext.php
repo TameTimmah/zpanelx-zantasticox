@@ -94,6 +94,16 @@ class module_controller {
         return $html;
     }
     
+    // Display search results
+    static function getSearchResults($search_query) {
+        global $zdbh;
+    }
+    
+    // Display specific category
+    static function getSpecificCategory($cat_name) {
+        global $zdbh;
+    }
+    
     // Display information about app
     static function getAppView($app_name) {
         global $zdbh;
@@ -201,6 +211,12 @@ class module_controller {
         }
         elseif($app!=NULL & $act=='install'){
             $html = module_controller::getAppInstall($app);
+        }
+        elseif($app!=NULL & $act=='search'){
+            $html = module_controller::getSearchResults($app);
+        }
+        elseif($app!=NULL & $act=='cat'){
+            $html = module_controller::getSearchResults($app);
         }
         else{
             $html = module_controller::get404();
