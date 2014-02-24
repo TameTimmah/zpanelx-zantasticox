@@ -36,40 +36,22 @@ class module_controller {
     }
     
     // Display list of apps
-    static function getMainView() {
+    static function getMainView($cat) {
         global $zdbh;
-        
-        // Display top bar
-        $html .= '
-            <div id="app_topbar">
-                <div class="pull-left">
-                    <select class="form-control">
-                        <option>All Applications</option>
-                        <option>Community</option>
-                        <option>Content Management</option>
-                        <option>Business</option>
-                        <option>Files</option>
-                        <option>Surveys</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-                <form class="pull-right form-inline" role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="appsearch" placeholder="Search Apps">
-                        <button type="submit" class="btn btn-default">Search</button>
-                    </div>
-                </form>
-            </div>
-            <hr>
-        ';
         
         // Get categories
         $query = "SELECT * FROM x_ai_categories";
         $sql = $zdbh->prepare($query);
         $sql->execute();
         
+        // Display 1st part of top bar
+        $html2 .= '<div id="app_topbar"><div class="pull-left"><select class="form-control"><option>All Applications</option>';
+        
         // For every category
         while ($rowdomains = $sql->fetch()) {
+            // Add options to dropdown
+            $html2 .= '<option>'.$rowdomains['ai_name'].'</option>';
+            
             $html .= '<section class="mainview">';
             $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
             $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
@@ -91,6 +73,20 @@ class module_controller {
             }
             $html .= '</section">';
         }
+        
+        // Display 2nd part of top bar
+                    $html2 .= '</select></div>
+                    <form class="pull-right form-inline" role="form" method="get">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search Apps" name="search_query">
+                            <button type="submit" class="btn btn-default">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <hr>
+            ';
+        
+        $html = $html2 . $html;
         return $html;
     }
     
@@ -204,7 +200,7 @@ class module_controller {
         
         // Decide what should be displayed
         if($app==NULL & $action==NULL){
-            $html = module_controller::getMainView();
+            $html = module_controller::getMainView($app);
         }
         elseif($app!=NULL & $act==NULL){
             $html = module_controller::getAppView($app);
@@ -213,9 +209,6 @@ class module_controller {
             $html = module_controller::getAppInstall($app);
         }
         elseif($app!=NULL & $act=='search'){
-            $html = module_controller::getSearchResults($app);
-        }
-        elseif($app!=NULL & $act=='cat'){
             $html = module_controller::getSearchResults($app);
         }
         else{
