@@ -45,7 +45,7 @@ class module_controller {
         $sql->execute();
         
         // Display 1st part of top bar
-        $html2 .= '<div id="app_topbar"><div class="pull-left"><select class="form-control" onchange="var str1 = \'?module=app_installer&query=\';var str2 = this.options[this.selectedIndex].value;location = str1.concat(str2);"><option>All Applications</option>';
+        $html2 .= '<div id="app_topbar"><div class="pull-left"><select class="form-control" onchange="var str1 = \'?module=app_installer&cat=\';var str2 = this.options[this.selectedIndex].value;location = str1.concat(str2);"><option>All Applications</option>';
         
         // For every category
         while ($rowdomains = $sql->fetch()) {
@@ -70,7 +70,9 @@ class module_controller {
 
                 // For every app in category
                 while ($rowdomains2 = $sql2->fetch()) {
-                    $html .= '<a href="?module=app_installer&act=view&query='.strtolower($rowdomains2['ai_name']).'">
+                    $html .= '<a href="?module=app_installer&act=view&query='.strtolower($rowdomains2['ai_name']);
+                    if($cat != NULL){$html .= '&cat='.$cat;}
+                    $html .= '">
                         <img src="modules/app_installer/apps/'.strtolower($rowdomains2['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                         <h5>'.$rowdomains2['ai_name'].'</h5>
                         <h6>'.$rowdomains2['ai_type'].'</h6>
@@ -116,7 +118,7 @@ class module_controller {
     }
     
     // Display information about app
-    static function getAppView($app_name) {
+    static function getAppView($app_name,$cat) {
         global $zdbh;
         
         // Get app information
@@ -134,7 +136,9 @@ class module_controller {
             $html .= '
                     <div id="app_topbar">
                         <div class="pull-left">
-                            <a href="?module=app_installer" class="btn btn-default">Return to list</a>
+                            <a href="?module=app_installer';
+            if($cat != NULL){$html .= '&cat='.$cat;}
+            $html.='" class="btn btn-default">Return to list</a>
                         </div>
                         <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
                             <div class="form-group">
@@ -211,14 +215,15 @@ class module_controller {
     static function getModuleDisplay() {
         // Add GET contents to variables
         $query = htmlspecialchars($_GET['query']);
+        $category = htmlspecialchars($_GET['cat']);
         $act = htmlspecialchars($_GET['act']);
         
         // Decide what should be displayed
-        if($act==NULL){
-            $html = module_controller::getMainView($query);
+        if($query==NULL & $act==NULL){
+            $html = module_controller::getMainView($category);
         }
         elseif($query!=NULL & $act=='view'){
-            $html = module_controller::getAppView($query);
+            $html = module_controller::getAppView($query,$category);
         }
         elseif($query!=NULL & $act=='install'){
             $html = module_controller::getAppInstall($query);
