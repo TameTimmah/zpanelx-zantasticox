@@ -1,4 +1,5 @@
 <?php
+
 /*
  * App Installer
  * A Open Source Module for ZPanel
@@ -17,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 class module_controller {
     
     static function getModuleName() {
@@ -36,33 +38,33 @@ class module_controller {
     }
     
     // Display list of apps
-    static function getMainView($cat) {
+    static function getMainView() {
+        
         global $zdbh;
         
         // Get categories
-        $query = "SELECT * FROM x_ai_categories";
-        $sql = $zdbh->prepare($query);
+        $sql = $zdbh->prepare("SELECT * FROM x_ai_categories");
         $sql->execute();
         
-        // Display 1st part of top bar
-        $html2 .= '<div id="app_topbar"><div class="pull-left"><select class="form-control" onchange="var str1 = \'?module=app_installer&cat=\';var str2 = this.options[this.selectedIndex].value;location = str1.concat(str2);"><option>All Applications</option>';
-        
         // For every category
-        while ($rowdomains = $sql->fetch()) {
-            // Add options to dropdown
-            if ($cat == $rowdomains['ai_name']) {
-                $html2 .= '<option selected>'.$rowdomains['ai_name'].'</option>';
-            }else {
-                $html2 .= '<option>'.$rowdomains['ai_name'].'</option>';
+        while ($category = $sql->fetch()) {
+            
+            // Add options to dropdown in the top bar
+            if ($_GET['cat'] === $category['ai_name']) {
+                $options .= '<option selected>'.$category['ai_name'].'</option>';
+            }
+            else {
+                $options .= '<option>'.$category['ai_name'].'</option>';
             }
             
-            if ($cat == $rowdomains['ai_name'] || $cat == NULL || $cat == 'All Applications') {
+            // If category is selected in dropdown
+            if ($_GET['cat'] === $category['ai_name'] || $_GET['cat'] === NULL || $_GET['cat'] === 'All Applications') {
                 $html .= '<section class="mainview">';
-                $html .= '<h3>'.$rowdomains['ai_name'].'</h3>';
-                $html .= '<p>'.$rowdomains['ai_desc'].'</p>';
+                $html .= '<h3>'.$category['ai_name'].'</h3>';
+                $html .= '<p>'.$category['ai_desc'].'</p>';
 
                 // Get apps in category
-                $types = unserialize(base64_decode($rowdomains['ai_types']));
+                $types = unserialize(base64_decode($category['ai_types']));
                 $ids = "'". implode("', '", $types) ."'";
                 $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
                 $sql2 = $zdbh->prepare($query2);
@@ -70,40 +72,69 @@ class module_controller {
 
                 // For every app in category
                 while ($rowdomains2 = $sql2->fetch()) {
-                    $html .= '<a href="?module=app_installer&act=view&query='.strtolower($rowdomains2['ai_name']);
-                    if($cat != NULL){$html .= '&cat='.$cat;}
-                    $html .= '">
+                    
+                    $html .= '<a href="?module=app_installer';
+                    if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
+                    $html .= '&act=view&app='.strtolower($rowdomains2['ai_name']).'">
                         <img src="modules/app_installer/apps/'.strtolower($rowdomains2['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                         <h5>'.$rowdomains2['ai_name'].'</h5>
                         <h6>'.$rowdomains2['ai_type'].'</h6>
                     </a>';
+                    
                 }
+                
                 $html .= '</section">';
+                
             }
+            
         }
         
-        // Display 2nd part of top bar
-                    $html2 .= '</select></div>
-                    <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search Apps" name="query">
-                            <button type="submit" class="btn btn-default">Search</button>
-                        </div>
-                    </form>
+        // Top bar HTML
+        $top_bar = '<div id="app_topbar">
+            <div class="pull-left">
+                <select class="form-control" onchange="var str1 = \'?module=app_installer&cat=\';var str2 = this.options[this.selectedIndex].value;location = str1.concat(str2);">
+                    <option>All Applications</option>'
+                    . $options .
+                '</select>
+            </div>
+            <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search Apps" name="query">
+                    <button type="submit" class="btn btn-default">Search</button>
                 </div>
-                <hr>
-            ';
+            </form>
+        </div>
+        <hr>';
         
-        return $html2 . $html;
+        return $top_bar . $html;
+        
     }
     
     // Display search results
-    static function getSearchResults($search_query) {
+    static function getSearchResults() {
+        // ---- WIP ---- //
         global $zdbh;
         $html .= '                    
-            <div id="app_topbar">
+            <p>This module is under development and thus this page isn&apos;t functioning yet...</p>
+        ';
+        return $html;
+    }
+    
+    // Display information about app
+    static function getAppView() {
+        
+        global $zdbh;
+        
+        // Get app information
+        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
+        $sql->bindParam(':app_name', $_GET['app']);
+        $sql->execute();
+        $app_details = $sql->fetch();
+        
+        // App HTML
+        $html .= '<div id="app_topbar">
             <div class="pull-left">
-                <a href="?module=app_installer" class="btn btn-default">Return to list</a>
+                <a href="?module=app_installer';if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}$html.='" class="btn btn-default">Return to list</a>
             </div>
             <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
                 <div class="form-group">
@@ -113,85 +144,51 @@ class module_controller {
             </form>
         </div>
         <hr>
-        ';
-        return $html;
-    }
-    
-    // Display information about app
-    static function getAppView($app_name,$cat) {
-        global $zdbh;
         
-        // Get app information
-        $query = "SELECT * FROM x_ai_apps WHERE ai_name = '$app_name'";
-        $sql = $zdbh->prepare($query);
-        $sql->execute();
+        <div id="app_summary">
+            <img src="modules/app_installer/apps/'.strtolower($app_details['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$app_details['ai_name'].'">
+            <h3>'.$app_details['ai_name'].'</h3>
+            <p>'.$app_details['ai_desc'].'</p>
+        </div>
         
-        // Display app information
-        while ($rowdomains = $sql->fetch()) {
-            if($rowdomains['ai_db'] == 1){
-            $db_required = 'Required';
-            }else{
-            $db_required = 'Not Required';
-            }
-            $html .= '
-                    <div id="app_topbar">
-                        <div class="pull-left">
-                            <a href="?module=app_installer';
-            if($cat != NULL){$html .= '&cat='.$cat;}
-            $html.='" class="btn btn-default">Return to list</a>
-                        </div>
-                        <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search Apps" name="query">
-                                <button type="submit" class="btn btn-default">Search</button>
-                            </div>
-                        </form>
-                    </div>
-                    <hr>
-                    <div id="app_summary">
-                        <img src="modules/app_installer/apps/'.strtolower($rowdomains['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$rowdomains['ai_name'].'">
-                        <h3>'.$rowdomains['ai_name'].'</h3>
-                        <p>'.$rowdomains['ai_desc'].'</p>
-                    </div>
-                    
-                    <div class="text-center" id="app_buttons">
-                        <a href="'.$rowdomains['ai_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
-                        <a href="?module=app_installer&app='.strtolower($rowdomains['ai_name']).'&act=install" class="btn btn-primary">Install Application</a>
-                    </div>
-                    
-                    <table class="table" id="app_details">
-                        <thead>
-                            <tr>
-                                <th>Application</th>
-                                <th>Type</th>
-                                <th>Version</th>
-                                <th>Last Updated</th>
-                                <th>Database</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>'.$rowdomains['ai_name'].'</td>
-                                <td>'.$rowdomains['ai_type'].'</td>
-                                <td>'.$rowdomains['ai_version'].'</td>
-                                <td>'.$rowdomains['ai_updated'].'</td>
-                                <td>'.$db_required.'</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-            ';
-        }
+        <div class="text-center" id="app_buttons">
+            <a href="'.$app_details['ai_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
+            <a href="?module=app_installer&app='.$app_details['ai_name'].'&act=install" class="btn btn-primary">Install Application</a>
+        </div>
+        
+        <table class="table" id="app_details">
+            <thead>
+                <tr>
+                    <th>Application</th>
+                    <th>Type</th>
+                    <th>Version</th>
+                    <th>Last Updated</th>
+                    <th>Database</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>'.$app_details['ai_name'].'</td>
+                    <td>'.$app_details['ai_type'].'</td>
+                    <td>'.$app_details['ai_version'].'</td>
+                    <td>'.$app_details['ai_updated'].'</td>
+                    <td>';if ($app_details['ai_db']!==1){$html.='Not Required';}else{$html.='Required';}$html.='</td>
+                </tr>
+            </tbody>
+        </table>';
+        
         return $html;
+        
     }
     
     // Display installer page for app
-    static function getAppInstall($app_name) {
+    static function getAppInstall() {
+        // ---- WIP ---- //
         global $zdbh;
         
         // Get app information
-        $query = "SELECT * FROM x_ai_apps WHERE ai_name = '$app_name'";
-        $sql = $zdbh->prepare($query);
+        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
+        $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         
         // Display app installer
@@ -206,35 +203,31 @@ class module_controller {
     
     // Display 404 error
     static function get404() {
+        
         header("HTTP/1.0 404 Not Found");
-        $html = '<h1>404 Not Found</h1>';
-        return $html;
+        return '<h1>Requested Page Not Found!</h1>';
+        
     }
     
-    // Handles what is displayed
+    // Handles what is displayed depending on the 'act' GET request.
     static function getModuleDisplay() {
-        // Add GET contents to variables
-        $query = htmlspecialchars($_GET['query']);
-        $category = htmlspecialchars($_GET['cat']);
-        $act = htmlspecialchars($_GET['act']);
         
-        // Decide what should be displayed
-        if($query==NULL & $act==NULL){
-            $html = module_controller::getMainView($category);
+        if($_GET['act']===NULL) {
+            return module_controller::getMainView();
         }
-        elseif($query!=NULL & $act=='view'){
-            $html = module_controller::getAppView($query,$category);
+        elseif($_GET['act']==='view') {
+            return module_controller::getAppView();
         }
-        elseif($query!=NULL & $act=='install'){
-            $html = module_controller::getAppInstall($query);
+        elseif($_GET['act']==='install') {
+            return module_controller::getAppInstall();
         }
-        elseif($query!=NULL & $act=='search'){
-            $html = module_controller::getSearchResults($query);
+        elseif($_GET['act']==='search') {
+            return module_controller::getSearchResults();
         }
-        else{
-            $html = module_controller::get404();
+        else {
+            return module_controller::get404();
         }
-        return $html;
+        
     }
     
 }
