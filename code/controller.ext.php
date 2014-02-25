@@ -70,7 +70,7 @@ class module_controller {
 
                 // For every app in category
                 while ($rowdomains2 = $sql2->fetch()) {
-                    $html .= '<a href="?module=app_installer&query='.strtolower($rowdomains2['ai_name']).'&act=view">
+                    $html .= '<a href="?module=app_installer&act=view&query='.strtolower($rowdomains2['ai_name']).'">
                         <img src="modules/app_installer/apps/'.strtolower($rowdomains2['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
                         <h5>'.$rowdomains2['ai_name'].'</h5>
                         <h6>'.$rowdomains2['ai_type'].'</h6>
@@ -82,9 +82,9 @@ class module_controller {
         
         // Display 2nd part of top bar
                     $html2 .= '</select></div>
-                    <form class="pull-right form-inline" role="form" method="get">
+                    <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search Apps" name="search_query">
+                            <input type="text" class="form-control" placeholder="Search Apps" name="query">
                             <button type="submit" class="btn btn-default">Search</button>
                         </div>
                     </form>
@@ -98,11 +98,21 @@ class module_controller {
     // Display search results
     static function getSearchResults($search_query) {
         global $zdbh;
-    }
-    
-    // Display specific category
-    static function getSpecificCategory($cat_name) {
-        global $zdbh;
+        $html .= '                    
+            <div id="app_topbar">
+            <div class="pull-left">
+                <a href="?module=app_installer" class="btn btn-default">Return to list</a>
+            </div>
+            <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search Apps" name="query">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </div>
+            </form>
+        </div>
+        <hr>
+        ';
+        return $html;
     }
     
     // Display information about app
@@ -126,9 +136,9 @@ class module_controller {
                         <div class="pull-left">
                             <a href="?module=app_installer" class="btn btn-default">Return to list</a>
                         </div>
-                        <form class="pull-right form-inline" role="form">
+                        <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="appsearch" placeholder="Search Apps">
+                                <input type="text" class="form-control" placeholder="Search Apps" name="query">
                                 <button type="submit" class="btn btn-default">Search</button>
                             </div>
                         </form>
