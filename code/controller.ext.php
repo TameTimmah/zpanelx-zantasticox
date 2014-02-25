@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 class module_controller {
-
+    
     static function getModuleName() {
         $module_name = ui_module::GetModuleName();
         return $module_name;
@@ -92,8 +92,7 @@ class module_controller {
                 <hr>
             ';
         
-        $html = $html2 . $html;
-        return $html;
+        return $html2 . $html;
     }
     
     // Display search results
