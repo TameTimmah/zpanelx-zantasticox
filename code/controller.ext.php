@@ -218,7 +218,7 @@ class module_controller {
                     <td>'.$app_details['ai_type'].'</td>
                     <td>'.$app_details['ai_version'].'</td>
                     <td>'.$app_details['ai_updated'].'</td>
-                    <td>';if ($app_details['ai_db']!==1){$html.='Not Required';}else{$html.='Required';}$html.='</td>
+                    <td>';if($app_details['ai_db']!=1){$html.='Not ';}$html.='Required</td>
                 </tr>
             </tbody>
         </table>';
