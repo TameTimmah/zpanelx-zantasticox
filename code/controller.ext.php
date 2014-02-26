@@ -62,14 +62,14 @@ class module_controller {
                 $html .= '<section class="mainview">';
                 $html .= '<h3>'.$category['ai_name'].'</h3>';
                 $html .= '<p>'.$category['ai_desc'].'</p>';
-
+                
                 // Get apps in category
                 $types = unserialize(base64_decode($category['ai_types']));
                 $ids = "'". implode("', '", $types) ."'";
                 $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
                 $sql2 = $zdbh->prepare($query2);
                 $sql2->execute();
-
+                
                 // For every app in category
                 while ($rowdomains2 = $sql2->fetch()) {
                     
@@ -97,8 +97,10 @@ class module_controller {
                     . $options .
                 '</select>
             </div>
-            <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
+            <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
+                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="act" value="search">
                     <input type="text" class="form-control" placeholder="Search Apps" name="query">
                     <button type="submit" class="btn btn-default">Search</button>
                 </div>
@@ -112,12 +114,19 @@ class module_controller {
     
     // Display search results
     static function getSearchResults() {
-        // ---- WIP ---- //
+        
         global $zdbh;
-        $html .= '                    
-            <p>This module is under development and thus this page isn&apos;t functioning yet...</p>
-        ';
+        
+        // Get app information
+        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :query");
+        $sql->bindParam(':query', $_GET['query']);
+        $sql->execute();
+        $app_details = $sql->fetch();
+        
+        
+        
         return $html;
+        
     }
     
     // Display information about app
@@ -136,8 +145,10 @@ class module_controller {
             <div class="pull-left">
                 <a href="?module=app_installer';if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}$html.='" class="btn btn-default">Return to list</a>
             </div>
-            <form class="pull-right form-inline" role="form" method="get" action="?module=app_installer&act=search">
+            <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
+                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="act" value="search">
                     <input type="text" class="form-control" placeholder="Search Apps" name="query">
                     <button type="submit" class="btn btn-default">Search</button>
                 </div>
