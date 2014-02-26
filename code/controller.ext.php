@@ -138,11 +138,11 @@ class module_controller {
             
             global $zdbh;
             
-            $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
-            $sql->bindParam(':app_name', $_GET['query']);
+            $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :query OR ai_type = :query");
+            $sql->bindParam(':query',htmlentities($_GET['query']));
             $sql->execute();
             
-            $html .= '<p>You searched for '.htmlentities($_GET['query']).'.</p><section class="mainview">';
+            $html .= '<p>You searched for &apos;'.htmlentities($_GET['query']).'&apos;.</p><section class="mainview">';
             
             // For every app in category
             while ($result = $sql->fetch()) {
