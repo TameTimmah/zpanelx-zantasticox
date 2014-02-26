@@ -66,19 +66,18 @@ class module_controller {
                 // Get apps in category
                 $types = unserialize(base64_decode($category['ai_types']));
                 $ids = "'". implode("', '", $types) ."'";
-                $query2 = "SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)";
-                $sql2 = $zdbh->prepare($query2);
+                $sql2 = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)");
                 $sql2->execute();
                 
                 // For every app in category
-                while ($rowdomains2 = $sql2->fetch()) {
+                while ($app = $sql2->fetch()) {
                     
                     $html .= '<a href="?module=app_installer';
                     if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
-                    $html .= '&act=view&app='.strtolower($rowdomains2['ai_name']).'">
-                        <img src="modules/app_installer/apps/'.strtolower($rowdomains2['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$rowdomains2['ai_name'].'">
-                        <h5>'.$rowdomains2['ai_name'].'</h5>
-                        <h6>'.$rowdomains2['ai_type'].'</h6>
+                    $html .= '&act=view&app='.$app['ai_name'].'">
+                        <img src="modules/app_installer/apps/'.strtolower($app['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$app['ai_name'].'">
+                        <h5>'.$app['ai_name'].'</h5>
+                        <h6>'.$app['ai_type'].'</h6>
                     </a>';
                     
                 }
@@ -124,7 +123,7 @@ class module_controller {
                 <div class="form-group">
                     <input type="hidden" name="module" value="app_installer">
                     <input type="hidden" name="act" value="search">
-                    <input type="text" class="form-control" placeholder="Search Apps" name="query" value="'.htmlentities($_GET['query']).'">
+                    <input type="text" class="form-control" placeholder="Search Apps" name="query" value="'.$_GET['query'].'">
                     <button type="submit" class="btn btn-default">Search</button>
                 </div>
             </form>
@@ -139,10 +138,10 @@ class module_controller {
             global $zdbh;
             
             $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :query OR ai_type = :query");
-            $sql->bindParam(':query',htmlentities($_GET['query']));
+            $sql->bindParam(':query',$_GET['query']);
             $sql->execute();
             
-            $html .= '<p>You searched for &apos;'.htmlentities($_GET['query']).'&apos;.</p><section class="mainview">';
+            $html .= '<p>You searched for &apos;'.$_GET['query'].'&apos;.</p><section class="mainview">';
             
             // For every app in category
             while ($result = $sql->fetch()) {
