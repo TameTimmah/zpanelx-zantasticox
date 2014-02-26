@@ -115,16 +115,51 @@ class module_controller {
     // Display search results
     static function getSearchResults() {
         
-        global $zdbh;
+        // Top bar HTML
+        $html = '<div id="app_topbar">
+            <div class="pull-left">
+                <a href="?module=app_installer';if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}$html.='" class="btn btn-default">Return to list</a>
+            </div>
+            <form class="pull-right form-inline" role="form" method="get">
+                <div class="form-group">
+                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="act" value="search">
+                    <input type="text" class="form-control" placeholder="Search Apps" name="query" value="'.htmlentities($_GET['query']).'">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </div>
+            </form>
+        </div>
+        <hr>';
         
-        // Get app information
-        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :query");
-        $sql->bindParam(':query', $_GET['query']);
-        $sql->execute();
-        $app_details = $sql->fetch();
-        
-        
-        
+        if ($_GET['query']==NULL) {
+            $html .= '<p>Please enter an app to search for or <a href="?module=app_installer">return to the list</a>.</p>';
+        }
+        else {
+            
+            global $zdbh;
+            
+            $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
+            $sql->bindParam(':app_name', $_GET['query']);
+            $sql->execute();
+            
+            $html .= '<p>You searched for '.htmlentities($_GET['query']).'.</p><section class="mainview">';
+            
+            // For every app in category
+            while ($result = $sql->fetch()) {
+
+                $html .= '<a href="?module=app_installer';
+                if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
+                $html .= '&act=view&app='.strtolower($result['ai_name']).'">
+                    <img src="modules/app_installer/apps/'.strtolower($result['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$result['ai_name'].'">
+                    <h5>'.$result['ai_name'].'</h5>
+                    <h6>'.$result['ai_type'].'</h6>
+                </a>';
+                
+            }
+            
+            $html .= '</section>';
+            
+        }
         return $html;
         
     }
