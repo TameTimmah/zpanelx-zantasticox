@@ -240,7 +240,7 @@ class module_controller {
         while ($app_details = $sql->fetch()) {
             $html .= '
                 <h3>You are about to install '.$app_details['ai_name'].'!</h3>
-                <p>This install wizard will create all the needed files and directories for '.$app_details['ai_name'].'';if($app_details['ai_db']==1){$html.=' but requires you to setup the database';}$html.='.
+                <p>This install wizard will create all the needed files and directories for '.$app_details['ai_name'].'';if($app_details['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
 
                 <form role="form" id="ai_installform" method="post">
                   <div class="form-group">
