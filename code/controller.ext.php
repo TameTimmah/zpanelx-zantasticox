@@ -275,6 +275,11 @@ class module_controller {
                     <input class="form-control" type="text" style="max-width:250px" name="aiform_subfolder">
                     <span class="help-block">For example, type "blog/happy" to install '.$app_details['ai_name'].' into "yourdomain.com/blog/happy".</span>
                   </div>
+                  <p>By installing this application:</p>
+                  <ul>
+                  <li>You agree to the application&apos;s end user license agreement.</li>
+                  <li>You accept all files within the install directory will be permanently deleted.</li>
+                  </ul>
                   <button type="submit" class="btn btn-primary">Install Application</button>
                 </form>
                 
