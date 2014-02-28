@@ -237,10 +237,47 @@ class module_controller {
         $sql->execute();
         
         // Display app installer
-        while ($rowdomains = $sql->fetch()) {
+        while ($app_details = $sql->fetch()) {
             $html .= '
-                <h3>This is the installer for '.$rowdomains['ai_name'].'.</h3>
-                <p>This module is under development and thus this page isn&apos;t functioning yet...</p>
+                <h3>You are about to install '.$app_details['ai_name'].'!</h3>
+                <p>This install wizard will create all the needed files and directories for '.$app_details['ai_name'].'';if($app_details['ai_db']==1){$html.=' but requires you to setup the database';}$html.='.
+
+                <form role="form" id="ai_installform" method="post">
+                  <div class="form-group">
+                    <label for="aiform_domain">Please select the domain to install '.$app_details['ai_name'].' to:</label>
+                    <br>
+                    <select class="form-control" style="max-width:250px" id="aiform_domain">
+                        <option>yourdomain.com</option>
+                        <option>yourdomain.net</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Would you like to install '.$app_details['ai_name'].' into a subfolder?</label>
+                    <br>
+                    <label class="ai_radio"><input type="radio" name="ai_subfolder" value="no" id="ai_subfolder_no" checked="yes" onchange="ai_subfoldercheck()"> No</label>
+                    <br>
+                    <label class="ai_radio"><input type="radio" name="ai_subfolder" value="yes" id="ai_subfolder_yes" onchange="ai_subfoldercheck()"> Yes</label>
+                  </div>
+                  
+ <script>
+    function ai_subfoldercheck() {
+        if (document.getElementById("ai_subfolder_no").checked) {
+            document.getElementById("ai_installfolder").style.display = "none";
+        } else {
+            document.getElementById("ai_installfolder").style.display = "block";
+        }
+    }
+    </script>
+
+                  <div class="form-group" id="ai_installfolder">
+                    <label for="aiform_domain">Please enter a subfolder to install '.$app_details['ai_name'].' to:</label>
+                    <br>
+                    <input class="form-control" type="text" style="max-width:250px" name="aiform_subfolder">
+                    <span class="help-block">For example, type "blog/happy" to install '.$app_details['ai_name'].' into "yourdomain.com/blog/happy".</span>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Install Application</button>
+                </form>
+                
             ';
         }
         return $html;

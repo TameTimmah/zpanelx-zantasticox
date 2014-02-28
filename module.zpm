@@ -69,6 +69,18 @@
         table-layout:fixed;
         margin:0;
     }
+    
+    #ai_installform .form-group {
+        margin:0 0 15px;
+    }
+    
+    #ai_installform label.ai_radio {
+        font-weight: normal;
+    }
+    
+    #ai_installform #ai_installfolder {
+        display:none;
+    }
 
 </style>
 <div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
