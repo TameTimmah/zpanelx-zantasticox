@@ -9,6 +9,8 @@ It is open source, licensed under GPLv3 or any later version.
 
 Currently this is not a fully functioning module - you can't actually install the apps...
 
-The front-end is almost complete though, and I will soon be getting down to all the nitty gritty code to actually install the apps and so on.
+The front-end is complete and just requires some testing and polishing.
+
+ I am beginning all the nitty gritty code to actually install the apps and so on.
 
 Your welcome to make a pull request to help me out :wink:
