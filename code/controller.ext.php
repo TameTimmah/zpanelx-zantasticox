@@ -254,7 +254,7 @@ class module_controller {
                 if($real_extract_path) {
 
                     $zip = new ZipArchive;
-                    $zip->open($real_extract_path);
+                    $zip->open($zip_path);
                     $zip->extractTo($real_extract_path);
                     $zip->close();
                     $html .= '<h3>Installed '.$app_details['ai_name'].'!</h3>';
