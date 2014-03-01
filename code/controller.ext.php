@@ -247,7 +247,22 @@ class module_controller {
         $app_details = $sql->fetch();
         
         if ($_POST['aiform_domain'] != NULL & $_POST['ai_subfolder'] != NULL) {
-            $html .= '<h3>Installing...</h3>';
+            $html .= '<h3>Installing into...</h3>';
+            $zip_path = '/etc/zpanel/panel/modules/app_installer/apps/'.strtolower($app_details['ai_name']).'/archive.zip';
+            $extract_path = '/var/zpanel/hostdata/zadmin/public_html/'.str_replace(".","_",$_POST['aiform_domain']);
+            $html .= '<p>Zip directory: '.$zip_path;
+            $html .= '<p>Install directory: '.$extract_path;
+            
+            $zip = new ZipArchive;
+            $res = $zip->open($zip_path);
+            if ($res === TRUE) {
+              $zip->extractTo($extract_path);
+              $zip->close();
+              $html .= '<h3>woot!</h3>';
+            } else {
+              $html .= '<h3>doh!</h3>';
+            }
+            
         }
         else {
         // Display app installer
