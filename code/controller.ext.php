@@ -244,9 +244,9 @@ class module_controller {
         $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
+        $app_details = $sql->fetch();
         
         // Display app installer
-        while ($app_details = $sql->fetch()) {
             $html .= '
                 <h3>You are about to install '.$app_details['ai_name'].'!</h3>
                 <p>This install wizard will create all the needed files and directories for '.$app_details['ai_name'].'';if($app_details['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
@@ -280,11 +280,12 @@ class module_controller {
                   <li>You agree to the application&apos;s end user license agreement.</li>
                   <li>You accept all files within the install directory will be permanently deleted.</li>
                   </ul>
-                  <button type="submit" class="btn btn-primary">Install Application</button>
+                  <a href="?module=app_installer';
+                    if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
+                    $html .= '&act=view&app='.$app_details['ai_name'].'" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
                 </form>
-                
             ';
-        }
+        
         return $html;
     }
     
