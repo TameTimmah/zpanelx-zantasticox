@@ -258,9 +258,8 @@ class module_controller {
             if ($res === TRUE) {
               $zip->extractTo($extract_path);
               $zip->close();
-              $html .= '<h3>woot!</h3>';
             } else {
-              $html .= '<h3>doh!</h3>';
+              $html .= '<h3>Error - could not find zip file.</h3>';
             }
             
         }
