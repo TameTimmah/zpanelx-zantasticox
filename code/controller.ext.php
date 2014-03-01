@@ -234,7 +234,7 @@ class module_controller {
         // ---- WIP ---- //
         global $zdbh;
         
-        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk ='".$_SESSION['zpuid']."' and vh_active_in='1' and vh_deleted_ts is NULL");
+        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk ='".$_SESSION['zpuid']."' and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
         $sql2->execute();
         while ($account_details = $sql2->fetch()) {
             $options .= "<option value=\"".$account_details['vh_name_vc']."\">".$account_details['vh_name_vc']."</option>";
