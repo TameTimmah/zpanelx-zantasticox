@@ -91,7 +91,7 @@ class module_controller {
         // Top bar HTML
         $top_bar = '<div id="app_topbar">
             <div class="pull-left">
-                <select class="form-control" onchange="var str1 = \'?module=app_installer&cat=\';var str2 = this.options[this.selectedIndex].value;location = str1.concat(str2);">
+                <select class="form-control" onchange="var str1=\'?module=app_installer&cat=\';var str2=this.options[this.selectedIndex].value;location=str1.concat(str2);">
                     <option>All Applications</option>'
                     . $options .
                 '</select>
@@ -259,15 +259,7 @@ class module_controller {
                     <label class="ai_radio"><input type="radio" name="ai_subfolder" value="yes" id="ai_subfolder_yes" onchange="ai_subfoldercheck()"> Yes</label>
                   </div>
                   
- <script>
-    function ai_subfoldercheck() {
-        if (document.getElementById("ai_subfolder_no").checked) {
-            document.getElementById("ai_installfolder").style.display = "none";
-        } else {
-            document.getElementById("ai_installfolder").style.display = "block";
-        }
-    }
-    </script>
+                  <script>function ai_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
 
                   <div class="form-group" id="ai_installfolder">
                     <label for="aiform_domain">Please enter a subfolder to install '.$app_details['ai_name'].' to:</label>
