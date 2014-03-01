@@ -74,6 +74,10 @@
         margin-top: 20px;
     }
     
+    #ai_installform select, #ai_installform input {
+        max-width: 250px;
+    }
+    
     #ai_installform .form-group {
         margin-bottom: 20px;
     }

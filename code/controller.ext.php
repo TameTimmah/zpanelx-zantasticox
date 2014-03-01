@@ -19,6 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+include('../../../cnf/db.php');
+include('../../../inc/dbc.inc.php');
+
 class module_controller {
     
     static function getModuleName() {
@@ -231,6 +234,12 @@ class module_controller {
         // ---- WIP ---- //
         global $zdbh;
         
+        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk ='".$_SESSION['zpuid']."' and vh_active_in='1' and vh_deleted_ts is NULL");
+        $sql2->execute();
+        while ($account_details = $sql2->fetch()) {
+            $options .= "<option value=\"".$account_details['vh_name_vc']."\">".$account_details['vh_name_vc']."</option>";
+        }
+        
         // Get app information
         $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
@@ -246,9 +255,8 @@ class module_controller {
                   <div class="form-group">
                     <label for="aiform_domain">Please select the domain to install '.$app_details['ai_name'].' to:</label>
                     <br>
-                    <select class="form-control" style="max-width:250px" id="aiform_domain">
-                        <option>yourdomain.com</option>
-                        <option>yourdomain.net</option>
+                    <select class="form-control" name="aiform_domain">
+                        '.$options.'
                     </select>
                   </div>
                   <div class="form-group">
