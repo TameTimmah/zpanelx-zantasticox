@@ -231,14 +231,21 @@ class module_controller {
     
     // Display installer page for app
     static function getAppInstall() {
-        // ---- WIP ---- //
         global $zdbh;
         
-        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk ='".$_SESSION['zpuid']."' and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
+        // Get user's domains
+        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
+        $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
         $sql2->execute();
-        while ($account_details = $sql2->fetch()) {
-            $options .= "<option value=\"".$account_details['vh_name_vc']."\">".$account_details['vh_name_vc']."</option>";
+        while ($vhost_details = $sql2->fetch()) {
+            $options .= "<option>".$vhost_details['vh_name_vc']."</option>";
         }
+        
+        // Get user's folder name
+        $sql3 = $zdbh->prepare("SELECT * FROM x_accounts WHERE ac_id_pk = :zpuid");
+        $sql3->bindParam(':zpuid', $_SESSION['zpuid']);
+        $sql3->execute();
+        $account_details = $sql3->fetch();
         
         // Get app information
         $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
@@ -249,7 +256,7 @@ class module_controller {
         if ($_POST['aiform_domain'] != NULL & $_POST['ai_subfolder'] != NULL) {
             $html .= '<h3>Installing into...</h3>';
             $zip_path = '/etc/zpanel/panel/modules/app_installer/apps/'.strtolower($app_details['ai_name']).'/archive.zip';
-            $extract_path = '/var/zpanel/hostdata/zadmin/public_html/'.str_replace(".","_",$_POST['aiform_domain']);
+            $extract_path = '/var/zpanel/hostdata/'.$account_details['ac_user_vc'].'/public_html/'.str_replace(".","_",$_POST['aiform_domain']);
             $html .= '<p>Zip directory: '.$zip_path;
             $html .= '<p>Install directory: '.$extract_path;
             
