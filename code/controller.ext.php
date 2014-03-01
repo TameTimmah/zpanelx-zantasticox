@@ -246,6 +246,10 @@ class module_controller {
         $sql->execute();
         $app_details = $sql->fetch();
         
+        if ($_POST['aiform_domain'] != NULL & $_POST['ai_subfolder'] != NULL) {
+            $html .= '<h3>Installing...</h3>';
+        }
+        else {
         // Display app installer
             $html .= '
                 <h3>You are about to install '.$app_details['ai_name'].'!</h3>
@@ -285,6 +289,7 @@ class module_controller {
                     $html .= '&act=view&app='.$app_details['ai_name'].'" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
                 </form>
             ';
+        }
         
         return $html;
     }
