@@ -7,10 +7,8 @@ It is open source, licensed under GPLv3 or any later version.
 
 ### Development Status
 
-Currently this is not a fully functioning module - you can't actually install the apps...
+Currently this is not a fully functioning module and still requires some polishing.
 
-The front-end is complete and just requires some testing and polishing.
-
- I am beginning all the nitty gritty code to actually install the apps and so on.
+It is not recommended for use on a production server.
 
 Your welcome to make a pull request to help me out :wink:
