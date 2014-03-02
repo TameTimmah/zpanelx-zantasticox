@@ -1,7 +1,7 @@
 <?php
 
 /*
- * App Installer
+ * Zantastico X
  * A Open Source Module for ZPanel
  * Copyright (C) 2014 Jacob Gelling
  * 
@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include('../../../cnf/db.php');
-include('../../../inc/dbc.inc.php');
+include '../../../cnf/db.php';
+include '../../../inc/dbc.inc.php';
 
 class module_controller {
     
@@ -30,8 +30,7 @@ class module_controller {
     }
 
     static function getModuleIcon() {
-        global $controller;
-        $module_icon = "modules/" . $controller->GetControllerRequest('URL', 'module') . "/assets/icon.png";
+        $module_icon = 'modules/zantasticox/assets/icon.png';
         return $module_icon;
     }
 
@@ -42,66 +41,63 @@ class module_controller {
     
     // Display list of apps
     static function getMainView() {
-        
         global $zdbh;
         
         // Get categories
-        $sql = $zdbh->prepare("SELECT * FROM x_ai_categories");
+        $sql = $zdbh->prepare("SELECT * FROM zanx_categories");
         $sql->execute();
         
         // For every category
         while ($category = $sql->fetch()) {
             
-            // Add options to dropdown in the top bar
-            if ($_GET['cat'] === $category['ai_name']) {
-                $options .= '<option selected>'.$category['ai_name'].'</option>';
-            }
-            else {
-                $options .= '<option>'.$category['ai_name'].'</option>';
+            // Add options to add to the dropdown in the top bar
+            if ($_GET['cat'] === $category['cat_name']) {
+                $options .= '<option selected>'.$category['cat_name'].'</option>';
+            } else {
+                $options .= '<option>'.$category['cat_name'].'</option>';
             }
             
-            // If category is selected in dropdown
-            if ($_GET['cat'] === $category['ai_name'] || $_GET['cat'] === NULL || $_GET['cat'] === 'All Applications') {
-                $html .= '<section class="mainview">';
-                $html .= '<h3>'.$category['ai_name'].'</h3>';
-                $html .= '<p>'.$category['ai_desc'].'</p>';
+            // If category should be shown
+            if ($_GET['cat'] === $category['cat_name'] || $_GET['cat'] === NULL || $_GET['cat'] === 'All Applications') {
                 
-                // Get apps in category
-                $types = unserialize(base64_decode($category['ai_types']));
-                $ids = "'". implode("', '", $types) ."'";
-                $sql2 = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_type IN ($ids)");
+                // Show title and description
+                $html .= '<section class="zanx_mainview">';
+                $html .= '<h3>'.$category['cat_name'].'</h3>';
+                $html .= '<p>'.$category['cat_desc'].'</p>';
+                
+                // Get enabled apps in category
+                $sql2 = $zdbh->prepare("SELECT * FROM zanx_apps WHERE cat_id = :cat_id AND app_enabled = 1");
+                $sql2->bindParam(':cat_id',$category['cat_id']);
                 $sql2->execute();
                 
                 // For every app in category
                 while ($app = $sql2->fetch()) {
-                    
-                    $html .= '<a href="?module=app_installer';
-                    if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
-                    $html .= '&act=view&app='.$app['ai_name'].'">
-                        <img src="modules/app_installer/apps/'.strtolower($app['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$app['ai_name'].'">
-                        <h5>'.$app['ai_name'].'</h5>
-                        <h6>'.$app['ai_type'].'</h6>
+                    $html .= '<a href="?module=zantasticox';
+                    if ($_GET['cat'] === $category['cat_name']) {
+                        $html .= '&cat='.$category['ai_name'];
+                    }
+                    $html .= '&act=view&app='.strtolower($app['app_name']).'">
+                        <img src="modules/zantasticox/apps/'.strtolower($app['app_name']).'/smallicon.png" width="50" height="50" alt="'.$app['app_name'].' Icon">
+                        <h5>'.$app['app_name'].'</h5>
+                        <h6>'.$app['app_type'].'</h6>
                     </a>';
-                    
                 }
                 
                 $html .= '</section">';
-                
             }
-            
         }
         
-        // Top bar HTML
-        $top_bar = '<div id="app_topbar">
+        // Show top bar
+        $top_bar = '<div id="zanx_topbar">
             <div class="pull-left">
-                <select class="form-control" onchange="var str1=\'?module=app_installer&cat=\';var str2=this.options[this.selectedIndex].value;location=str1.concat(str2);">
+                <select class="form-control" onchange="var str1=\'?module=zantasticox&cat=\';var str2=this.options[this.selectedIndex].value;location=str1.concat(str2);">
                     <option>All Applications</option>'
                     . $options .
                 '</select>
             </div>
             <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
-                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="module" value="zantasticox">
                     <input type="hidden" name="act" value="search">
                     <input type="text" class="form-control" placeholder="Search Apps" name="query">
                     <button type="submit" class="btn btn-default">Search</button>
@@ -111,59 +107,53 @@ class module_controller {
         <hr>';
         
         return $top_bar . $html;
-        
     }
     
     // Display search results
     static function getSearchResults() {
-        
         // Top bar HTML
-        $html = '<div id="app_topbar">
+        $html = '<div id="zanx_topbar">
             <div class="pull-left">
-                <a href="?module=app_installer';if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}$html.='" class="btn btn-default">Return to list</a>
+                <a href="?module=zantasticox" class="btn btn-default">Return to list</a>
             </div>
             <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
-                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="module" value="zantasticox">
                     <input type="hidden" name="act" value="search">
-                    <input type="text" class="form-control" placeholder="Search Apps" name="query" value="'.$_GET['query'].'">
+                    <input type="text" class="form-control" placeholder="Search Apps" name="query" value="'.htmlentities($_GET['query']).'">
                     <button type="submit" class="btn btn-default">Search</button>
                 </div>
             </form>
         </div>
         <hr>';
         
-        if ($_GET['query']==NULL) {
-            $html .= '<p>Please enter an app to search for or <a href="?module=app_installer">return to the list</a>.</p>';
-        }
-        else {
-            
+        if ($_GET['query'] == NULL) {
+            $html .= '<p>Please enter an app to search for or <a href="?module=zantasticox">return to the list</a>.</p>';
+        } else {
             global $zdbh;
             
-            $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :query OR ai_type = :query");
+            // Get apps which contain the query
+            $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :query OR app_type = :query");
             $sql->bindParam(':query',$_GET['query']);
             $sql->execute();
             
-            $html .= '<p>You searched for &apos;'.$_GET['query'].'&apos;.</p><section class="mainview">';
+            $html .= '<p>You searched for &quot;'.htmlentities($_GET['query']).'&quot;. Any results found are shown below.</p><section class="zanx_mainview">';
             
-            // For every app in category
+            // For every app
             while ($result = $sql->fetch()) {
-
-                $html .= '<a href="?module=app_installer';
-                if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
-                $html .= '&act=view&app='.strtolower($result['ai_name']).'">
-                    <img src="modules/app_installer/apps/'.strtolower($result['ai_name']).'/smallicon.png" width="50" height="50" alt="'.$result['ai_name'].'">
-                    <h5>'.$result['ai_name'].'</h5>
-                    <h6>'.$result['ai_type'].'</h6>
+                $html .= '<a href="?module=zantasticox';
+                if ($_GET['cat'] !== NULL) {
+                    $html .= '&cat='.$_GET['cat'];
+                }
+                $html .= '&act=view&app='.strtolower($result['app_name']).'">
+                    <img src="modules/zantasticox/apps/'.strtolower($result['app_name']).'/smallicon.png" width="50" height="50" alt="'.$result['app_name'].' Icon">
+                    <h5>'.$result['app_name'].'</h5>
+                    <h6>'.$result['app_type'].'</h6>
                 </a>';
-                
             }
-            
             $html .= '</section>';
-            
         }
         return $html;
-        
     }
     
     // Display information about app
@@ -172,19 +162,23 @@ class module_controller {
         global $zdbh;
         
         // Get app information
-        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
+        $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
-        $app_details = $sql->fetch();
+        $app = $sql->fetch();
         
         // App HTML
-        $html .= '<div id="app_topbar">
+        $html .= '<div id="zanx_topbar">
             <div class="pull-left">
-                <a href="?module=app_installer';if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}$html.='" class="btn btn-default">Return to list</a>
+                <a href="?module=zantasticox';
+                if ($_GET['cat'] !== NULL) {
+                    $html .= '&cat='.$_GET['cat'];
+                }
+                $html.='" class="btn btn-default">Return to list</a>
             </div>
             <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
-                    <input type="hidden" name="module" value="app_installer">
+                    <input type="hidden" name="module" value="zantasticox">
                     <input type="hidden" name="act" value="search">
                     <input type="text" class="form-control" placeholder="Search Apps" name="query">
                     <button type="submit" class="btn btn-default">Search</button>
@@ -194,14 +188,14 @@ class module_controller {
         <hr>
         
         <div id="app_summary">
-            <img src="modules/app_installer/apps/'.strtolower($app_details['ai_name']).'/largeicon.png" width="100" height="100" alt="'.$app_details['ai_name'].'">
-            <h3>'.$app_details['ai_name'].'</h3>
-            <p>'.$app_details['ai_desc'].'</p>
+            <img src="modules/zantasticox/apps/'.strtolower($app['app_name']).'/largeicon.png" width="100" height="100" alt="'.$app['app_name'].' Icon">
+            <h3>'.$app['app_name'].'</h3>
+            <p>'.$app['app_desc'].'</p>
         </div>
         
         <div class="text-center" id="app_buttons">
-            <a href="'.$app_details['ai_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
-            <a href="?module=app_installer&app='.$app_details['ai_name'].'&act=install" class="btn btn-primary">Install Application</a>
+            <a href="'.$app['app_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
+            <a href="?module=zantasticox&app='.$app['app_name'].'&act=install" class="btn btn-primary">Install Application</a>
         </div>
         
         <table class="table" id="app_details">
@@ -216,11 +210,15 @@ class module_controller {
             </thead>
             <tbody>
                 <tr>
-                    <td>'.$app_details['ai_name'].'</td>
-                    <td>'.$app_details['ai_type'].'</td>
-                    <td>'.$app_details['ai_version'].'</td>
-                    <td>'.$app_details['ai_updated'].'</td>
-                    <td>';if($app_details['ai_db']!=1){$html.='Not ';}$html.='Required</td>
+                    <td>'.$app['app_name'].'</td>
+                    <td>'.$app['app_type'].'</td>
+                    <td>'.$app['app_version'].'</td>
+                    <td>'.$app['app_updated'].'</td>
+                    <td>';
+                    if ($app['app_db'] != 1) {
+                        $html.='Not ';
+                    }
+                    $html.='Required</td>
                 </tr>
             </tbody>
         </table>';
@@ -229,94 +227,104 @@ class module_controller {
         
     }
     
-    // Display installer page for app
-    static function getAppInstall() {
+    // Display install wizard
+    static function getInstallWizard() {
+        global $zdbh;
+        
+        // Get app information
+        $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
+        $sql->bindParam(':app_name', $_GET['app']);
+        $sql->execute();
+        $app = $sql->fetch();
+        
+        // Get user's domains
+        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
+        $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
+        $sql2->execute();
+        
+        // Add domains to dropdown
+        while ($vhost_details = $sql2->fetch()) {
+            $options .= "<option>".$vhost_details['vh_name_vc']."</option>";
+        }
+
+        // Display form
+        $html .= '
+            <h3>You are about to install '.$app['app_name'].'!</h3>
+            <p>This install wizard will create all the needed files and directories for '.$app['app_name'].'';if($app['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
+
+            <form role="form" id="ai_installform" method="post">
+              <div class="form-group">
+                <label for="aiform_domain">Please select the domain to install '.$app['app_name'].' to:</label>
+                <br>
+                <select class="form-control" name="zanx_domain">
+                    '.$options.'
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Would you like to install '.$app['app_name'].' into a subfolder?</label>
+                <br>
+                <label class="ai_radio"><input type="radio" name="ai_subfolder" value="no" id="ai_subfolder_no" checked="yes" onchange="ai_subfoldercheck()"> No</label>
+                <br>
+                <label class="ai_radio"><input type="radio" name="ai_subfolder" value="yes" id="ai_subfolder_yes" onchange="ai_subfoldercheck()"> Yes</label>
+              </div>
+
+              <script>function ai_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
+
+              <div class="form-group" id="ai_installfolder">
+                <label for="aiform_domain">Please enter a subfolder to install '.$app['app_name'].' to:</label>
+                <br>
+                <input class="form-control" type="text" style="max-width:250px" name="aiform_subfolder">
+                <span class="help-block">For example, type "blog/happy" to install '.$app['app_name'].' into "yourdomain.com/blog/happy".</span>
+              </div>
+              <p><i>By installing this application:</i></p>
+              <ul>
+              <li>You agree to the application&apos;s end user license agreement.</li>
+              <li>You accept all files within the install directory will be permanently deleted.</li>
+              </ul>
+              <a href="?module=zantasticox';
+                if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
+                $html .= '&act=view&app='.$app['app_name'].'" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
+            </form>
+        ';
+        return $html;
+    }
+    
+    // Do the install
+    static function getInstall() {
+        // Still a work in progress
+        // A bit messy...but it works (on linux)!
         global $zdbh;
         global $controller;
         
         // Get app information
-        $sql = $zdbh->prepare("SELECT * FROM x_ai_apps WHERE ai_name = :app_name");
+        $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
-        $app_details = $sql->fetch();
+        $app = $sql->fetch();
         
-        if ($_POST['aiform_domain'] != NULL) {
-            
-            $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
-            
-            $zip_path = realpath('./modules/app_installer/apps/'.strtolower($app_details['ai_name']).'/archive.zip');
-            $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['aiform_domain']).'/'.$_POST['aiform_subfolder'];
-            
-            if ($zip_path) {
-                mkdir($extract_path);
-                $real_extract_path = realpath($extract_path);
-                
-                if($real_extract_path) {
+        $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
 
-                    $zip = new ZipArchive;
-                    $zip->open($zip_path);
-                    $zip->extractTo($real_extract_path);
-                    $zip->close();
-                    $html .= '<h3>Installed '.$app_details['ai_name'].'!</h3>';
-                }
-                else{
-                    $html .= '<p>Error - Could not find/create install directory</p>';
-                }
-            }else {
-                $html .= '<p>Error - Could not find install zip.</p>';
+        $zip_path = realpath('./modules/zantasticox/apps/'.strtolower($app['app_name']).'/archive.zip');
+        $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['aiform_domain']).'/'.$_POST['aiform_subfolder'];
+
+        if ($zip_path) {
+            mkdir($extract_path);
+            $real_extract_path = realpath($extract_path);
+
+            if($real_extract_path) {
+
+                $zip = new ZipArchive;
+                $zip->open($zip_path);
+                $zip->extractTo($real_extract_path);
+                $zip->close();
+                $html .= '<h3>Installed '.$app['app_name'].'!</h3>';
             }
-        }
-        else {
-            
-            // Get user's domains
-            $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
-            $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
-            $sql2->execute();
-            while ($vhost_details = $sql2->fetch()) {
-                $options .= "<option>".$vhost_details['vh_name_vc']."</option>";
+            else{
+                $html .= '<p>Error - Could not find/create install directory</p>';
             }
-            
-            // Display app installer
-            $html .= '
-                <h3>You are about to install '.$app_details['ai_name'].'!</h3>
-                <p>This install wizard will create all the needed files and directories for '.$app_details['ai_name'].'';if($app_details['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
-
-                <form role="form" id="ai_installform" method="post">
-                  <div class="form-group">
-                    <label for="aiform_domain">Please select the domain to install '.$app_details['ai_name'].' to:</label>
-                    <br>
-                    <select class="form-control" name="aiform_domain">
-                        '.$options.'
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Would you like to install '.$app_details['ai_name'].' into a subfolder?</label>
-                    <br>
-                    <label class="ai_radio"><input type="radio" name="ai_subfolder" value="no" id="ai_subfolder_no" checked="yes" onchange="ai_subfoldercheck()"> No</label>
-                    <br>
-                    <label class="ai_radio"><input type="radio" name="ai_subfolder" value="yes" id="ai_subfolder_yes" onchange="ai_subfoldercheck()"> Yes</label>
-                  </div>
-                  
-                  <script>function ai_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
-
-                  <div class="form-group" id="ai_installfolder">
-                    <label for="aiform_domain">Please enter a subfolder to install '.$app_details['ai_name'].' to:</label>
-                    <br>
-                    <input class="form-control" type="text" style="max-width:250px" name="aiform_subfolder">
-                    <span class="help-block">For example, type "blog/happy" to install '.$app_details['ai_name'].' into "yourdomain.com/blog/happy".</span>
-                  </div>
-                  <p><i>By installing this application:</i></p>
-                  <ul>
-                  <li>You agree to the application&apos;s end user license agreement.</li>
-                  <li>You accept all files within the install directory will be permanently deleted.</li>
-                  </ul>
-                  <a href="?module=app_installer';
-                    if($_GET['cat'] !== NULL){$html .= '&cat='.$_GET['cat'];}
-                    $html .= '&act=view&app='.$app_details['ai_name'].'" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
-                </form>
-            ';
+        }else {
+            $html .= '<p>Error - Could not find install zip.</p>';
         }
-        
         return $html;
     }
     
@@ -328,22 +336,31 @@ class module_controller {
         
     }
     
-    // Handles what is displayed depending on the 'act' GET request.
+    // Handles what is displayed
     static function getModuleDisplay() {
         
         if($_GET['act']===NULL) {
+            // View app list
             return module_controller::getMainView();
         }
         elseif($_GET['act']==='view') {
+            // View app details
             return module_controller::getAppView();
         }
+        elseif($_GET['act']==='install' & $_POST['zanx_domain'] != NULL) {
+            // Install application
+            return module_controller::getInstall();
+        }
         elseif($_GET['act']==='install') {
-            return module_controller::getAppInstall();
+            // Show install wizard
+            return module_controller::getInstallWizard();
         }
         elseif($_GET['act']==='search') {
+            // Show search results
             return module_controller::getSearchResults();
         }
         else {
+            // Show 404
             return module_controller::get404();
         }
         

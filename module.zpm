@@ -1,30 +1,30 @@
 <style>
-    #app_topbar form.form-inline input{
+    #zanx_topbar form.form-inline input{
         width:250px;
     }
 
-    #app_topbar {
+    #zanx_topbar {
         min-height:30px;
     }
 
     @media (max-width: 767px) {
 
-        #app_topbar select {
+        #zanx_topbar select {
             margin-bottom: 15px;
         }
 
-        #app_topbar .pull-left, #app_topbar .pull-right {
+        #zanx_topbar .pull-left, #app_topbar .pull-right {
             float:none;
         }
 
-        #app_topbar form.form-inline input{
+        #zanx_topbar form.form-inline input{
             width:100%;
             max-width:250px;
         }
 
     }
 
-    section.mainview a {
+    section.zanx_mainview a {
         display: inline-block;
         text-align: center;
         width:100px;
@@ -35,11 +35,11 @@
         border: 1px solid #DDD;
     }
 
-    section.mainview a h5 {
+    section.zanx_mainview a h5 {
         margin-bottom:0;
     }
 
-    section.mainview a h6 {
+    section.zanx_mainview a h6 {
         color:#666;
         display:inline-block;
         margin:0;
@@ -47,46 +47,46 @@
 
     @media (min-width: 768px) {
 
-        #app_summary {
+        #zanx_summary {
             min-height:100px;
         }
 
-        #app_summary img {
+        #zanx_summary img {
             float:left;
         }
 
-        #app_summary h3,  #app_summary p {
+        #zanx_summary h3,  #zanx_summary p {
             margin-left:115px;
         }
 
     }
     
-    #app_buttons {
+    #zanx_buttons {
         margin:20px 0;
     }
 
-    #app_details {
+    #zanx_details {
         table-layout:fixed;
         margin:0;
     }
     
-    #ai_installform {
+    #zanx_installform {
         margin-top: 20px;
     }
     
-    #ai_installform select, #ai_installform input {
+    #zanx_installform select, #zanx_installform input {
         max-width: 250px;
     }
     
-    #ai_installform .form-group {
+    #zanx_installform .form-group {
         margin-bottom: 20px;
     }
     
-    #ai_installform label.ai_radio {
+    #zanx_installform label.zanx_radio {
         font-weight: normal;
     }
     
-    #ai_installform #ai_installfolder {
+    #zanx_installform #zanx_installfolder {
         display:none;
     }
 

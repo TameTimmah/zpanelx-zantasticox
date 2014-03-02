@@ -1,1 +1,74 @@
 <?php
+
+/*
+ * Zantastico X
+ * A Open Source Module for ZPanel
+ * Copyright (C) 2014 Jacob Gelling
+ * 
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This module is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+require_once '/etc/zpanel/panel/cnf/db.php';
+require_once '/etc/zpanel/panel/dryden/db/driver.class.php';
+
+try {
+    $zdbh = new db_driver("mysql:host=$host;dbname=$dbname", $user, $pass);
+    $zdbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die($e);
+}
+
+// Create table for apps
+$apptable = "
+CREATE TABLE `zanx_apps` (
+  `app_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `app_name` varchar(32) NOT NULL,
+  `app_type` varchar(32) NOT NULL,
+  `app_size` varchar(8) NOT NULL,
+  `app_desc` text NOT NULL,
+  `app_site` varchar(64) NOT NULL,
+  `app_updated` date NOT NULL,
+  `app_db` tinyint(1) NOT NULL,
+  `app_version` varchar(10) NOT NULL,
+  `app_enabled` tinyint(1) NOT NULL,
+  `cat_id` smallint(6) NOT NULL,
+  PRIMARY KEY (`app_id`),
+  UNIQUE KEY `app_name` (`app_name`)
+) DEFAULT CHARSET=utf8;
+
+INSERT INTO `zanx_apps` (`app_id`, `app_name`, `app_type`, `app_size`, `app_desc`, `app_site`, `app_updated`, `app_db`, `app_version`, `app_enabled`, `cat_id`) VALUES
+(1, 'WordPress', 'Blog', '17.2', 'WordPress is a free and open source blogging tool and a content management system (CMS) based on PHP and MySQL, which runs on a web hosting service. Features include a plug-in architecture and a template system. WordPress is used by more than 18.9% of the top 10 million websites as of August 2013. WordPress is the most popular blogging system in use on the Web, at more than 60 million websites.', 'http://wordpress.org/', '2013-12-12', 1, '3.8.1', 1, 2),
+(2, 'MyBB', 'Forum', '6.6', 'From administration to posting a reply, MyBB is a forum package full of useful and to-the-point features for both you and your visitors, helping you to make running your bulletin board as easy as possible.', 'http://www.mybb.com/', '2013-12-30', 1, '1.6.12', 1, 1),
+(3, 'DokuWiki', 'Wiki', '13.6', 'DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn''t require a database. It is loved by users for its clean and readable syntax. The ease of maintenance, backup and integration makes it an administrator''s favourite.', 'https://www.dokuwiki.org/dokuwiki', '2013-12-08', 0, '2013-12-08', 1, 1),
+(4, 'concrete5', 'CMS', '36.2', 'concrete5 makes running a website easy. Go to any page in your site, and an editing toolbar gives you all the controls you need to update your website. No intimidating manuals, no complicated administration interfaces - just point and click.', 'http://www.concrete5.org/', '2013-08-28', 1, '5.6.2.1', 1, 2),
+(5, 'Drupal', 'CMS', '12.7', 'Drupal is an open source content management platform powering millions of websites and applications. Use Drupal to build everything from personal blogs to enterprise applications. Thousands of add-on modules and designs let you build any site you can imagine.', 'https://drupal.org/', '2014-01-15', 1, '7.26', 1, 2),
+(6, 'Joomla', 'CMS', '30.7', 'Joomla is an award-winning content management system (CMS), which enables you to build Web sites and powerful online applications. Many aspects, including its ease-of-use and extensibility, have made Joomla the most popular Web site software available. Best of all, Joomla is an open source solution that is freely available to everyone.', 'http://www.joomla.org/', '2014-02-06', 1, '3.2.2', 1, 2);
+";
+$zdbh->bindQuery($apptable);
+
+// Create table for categories
+$categorytable = "
+CREATE TABLE `zanx_categories` (
+  `cat_id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(32) NOT NULL,
+  `cat_desc` text NOT NULL,
+  PRIMARY KEY (`cat_id`),
+  UNIQUE KEY `cat_name` (`cat_name`)
+) DEFAULT CHARSET=utf8;
+
+INSERT INTO `zanx_categories` (`cat_id`, `cat_name`, `cat_desc`) VALUES
+(1, 'Community Building', 'Community Building apps contain forum systems/bulletin boards, guestbooks, and wikis.'),
+(2, 'Content Management', 'A content management system allows easy publishing, editing and modifying content as well as maintenance from a central interface. CMSs are often used to run websites containing blogs, news, and shopping carts. Also, many corporate and marketing websites use CMSs.');
+";
+$zdbh->bindQuery($categorytable);

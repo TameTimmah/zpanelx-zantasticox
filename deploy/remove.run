@@ -1,4 +1,24 @@
 <?php
+
+/*
+ * Zantastico X
+ * A Open Source Module for ZPanel
+ * Copyright (C) 2014 Jacob Gelling
+ * 
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This module is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once '/etc/zpanel/panel/cnf/db.php';
 require_once '/etc/zpanel/panel/dryden/db/driver.class.php';
 
@@ -9,10 +29,25 @@ try {
     die($e);
 }
 
-// Drop the app table
-$apptable = "DROP TABLE `x_ai_apps`";
-$zdbh->bindQuery($apptable);
+// Drop (delete) tables
+try {
+    $zdbh->bindQuery("DROP TABLE `zanx_apps`", Array());
+} catch (Exception $e) {
+    echo '------------------------------------------------------------
+A error occurred when deleting the \'zanx_categories\' table!
+You may need to delete it manually.
+------------------------------------------------------------
+'.$e.'
+';
+}
 
-// Drop the category table
-$categorytable = "DROP TABLE `x_ai_categories`";
-$zdbh->bindQuery($categorytable);
+try {
+    $zdbh->bindQuery("DROP TABLE `zanx_categories`", Array());
+} catch (Exception $e) {
+    echo '------------------------------------------------------------
+A error occurred when deleting the \'zanx_categories\' table!
+You may need to delete it manually.
+------------------------------------------------------------
+'.$e.'
+';
+}

@@ -1,3 +1,4 @@
+# OS Generated Files
 Thumbs.db
 ehthumbs.db
 Desktop.ini
@@ -10,3 +11,9 @@ $RECYCLE.BIN/
 ._*
 .Spotlight-V100
 .Trashes
+
+# ZPanel Package
+zantasticox.zpp
+
+# Custom Script for building the .zpp on Linux
+make.sh

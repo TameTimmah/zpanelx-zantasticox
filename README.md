@@ -1,7 +1,9 @@
-App Installer
+Zantastico X
 =============
 
-App Installer is a [ZPanelX](http://www.zpanelcp.com/) module which enables users to install a wide range of web applications such as WordPress and Joomla.
+Zantastico X is a [ZPanelX](http://www.zpanelcp.com/) module which enables users to install a wide range of web applications such as WordPress and Joomla.
+
+It is a complete rewrite of T.Gates, B.Allen, and M.Mirza's version.
 
 It is open source, licensed under GPLv3 or any later version.
 
