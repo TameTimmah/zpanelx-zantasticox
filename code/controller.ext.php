@@ -187,18 +187,18 @@ class module_controller {
         </div>
         <hr>
         
-        <div id="app_summary">
+        <div id="zanx_summary">
             <img src="modules/zantasticox/apps/'.strtolower($app['app_name']).'/largeicon.png" width="100" height="100" alt="'.$app['app_name'].' Icon">
             <h3>'.$app['app_name'].'</h3>
             <p>'.$app['app_desc'].'</p>
         </div>
         
-        <div class="text-center" id="app_buttons">
+        <div class="text-center" id="zanx_buttons">
             <a href="'.$app['app_site'].'" target="_blank" class="btn btn-default">Visit Website</a>
             <a href="?module=zantasticox&app='.$app['app_name'].'&act=install" class="btn btn-primary">Install Application</a>
         </div>
         
-        <table class="table" id="app_details">
+        <table class="table" id="zanx_details">
             <thead>
                 <tr>
                     <th>Application</th>
@@ -252,9 +252,9 @@ class module_controller {
             <h3>You are about to install '.$app['app_name'].'!</h3>
             <p>This install wizard will create all the needed files and directories for '.$app['app_name'].'';if($app['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
 
-            <form role="form" id="ai_installform" method="post">
+            <form role="form" id="zanx_installform" method="post">
               <div class="form-group">
-                <label for="aiform_domain">Please select the domain to install '.$app['app_name'].' to:</label>
+                <label for="zanx_domain">Please select the domain to install '.$app['app_name'].' to:</label>
                 <br>
                 <select class="form-control" name="zanx_domain">
                     '.$options.'
@@ -263,17 +263,17 @@ class module_controller {
               <div class="form-group">
                 <label>Would you like to install '.$app['app_name'].' into a subfolder?</label>
                 <br>
-                <label class="ai_radio"><input type="radio" name="ai_subfolder" value="no" id="ai_subfolder_no" checked="yes" onchange="ai_subfoldercheck()"> No</label>
+                <label class="ai_radio"><input type="radio" name="zanx_subfolder_toggle" value="no" id="zanx_subfolder_no" checked="yes" onchange="zanx_subfoldercheck()"> No</label>
                 <br>
-                <label class="ai_radio"><input type="radio" name="ai_subfolder" value="yes" id="ai_subfolder_yes" onchange="ai_subfoldercheck()"> Yes</label>
+                <label class="ai_radio"><input type="radio" name="zanx_subfolder_toggle" value="yes" id="zanx_subfolder_yes" onchange="zanx_subfoldercheck()"> Yes</label>
               </div>
 
-              <script>function ai_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
+              <script>function zanx_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
 
-              <div class="form-group" id="ai_installfolder">
-                <label for="aiform_domain">Please enter a subfolder to install '.$app['app_name'].' to:</label>
+              <div class="form-group" id="zanx_installfolder">
+                <label for="zanx_subfolder">Please enter a subfolder to install '.$app['app_name'].' to:</label>
                 <br>
-                <input class="form-control" type="text" style="max-width:250px" name="aiform_subfolder">
+                <input class="form-control" type="text" name="zanx_subfolder">
                 <span class="help-block">For example, type "blog/happy" to install '.$app['app_name'].' into "yourdomain.com/blog/happy".</span>
               </div>
               <p><i>By installing this application:</i></p>
@@ -305,7 +305,7 @@ class module_controller {
         $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
 
         $zip_path = realpath('./modules/zantasticox/apps/'.strtolower($app['app_name']).'/archive.zip');
-        $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['aiform_domain']).'/'.$_POST['aiform_subfolder'];
+        $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['zanx_domain']).'/'.$_POST['zanx_subfolder'];
 
         if ($zip_path) {
             mkdir($extract_path);
