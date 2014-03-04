@@ -3,6 +3,7 @@
     <name>Zantastico X</name>
     <version>100</version>
     <defaultcat>File Management</defaultcat>
+    <type>user</type>
     <desc>Easily install web applications, such as WordPress and Joomla, into your webspace.</desc>
     <authorname>Jacob Gelling</authorname>
     <authoremail>jacobgelling@hawkservers.com</authoremail>
