@@ -305,7 +305,11 @@ class module_controller {
         $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
 
         $zip_path = realpath('./modules/zantasticox/apps/'.strtolower($app['app_name']).'/archive.zip');
-        $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['zanx_domain']).'/'.$_POST['zanx_subfolder'];
+        $extract_path = ctrl_options::GetOption('hosted_dir').$account_details['username'].'/public_html/'.str_replace(".","_",$_POST['zanx_domain']);
+        
+        if ($_POST['zanx_subfolder_toggle']='yes') {
+            $extract_path .= '/'.$_POST['zanx_subfolder'];
+        }
 
         if ($zip_path) {
             mkdir($extract_path);
