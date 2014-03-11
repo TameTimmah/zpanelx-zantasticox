@@ -268,7 +268,7 @@ class module_controller {
                 <label class="ai_radio"><input type="radio" name="zanx_subfolder_toggle" value="yes" id="zanx_subfolder_yes" onchange="zanx_subfoldercheck()"> Yes</label>
               </div>
 
-              <script>function zanx_subfoldercheck(){if(document.getElementById("ai_subfolder_no").checked){document.getElementById("ai_installfolder").style.display="none"}else{document.getElementById("ai_installfolder").style.display="block"}}</script>
+              <script>function zanx_subfoldercheck(){if(document.getElementById("zanx_subfolder_no").checked){document.getElementById("zanx_installfolder").style.display="none"}else{document.getElementById("zanx_installfolder").style.display="block"}}</script>
 
               <div class="form-group" id="zanx_installfolder">
                 <label for="zanx_subfolder">Please enter a subfolder to install '.$app['app_name'].' to:</label>
