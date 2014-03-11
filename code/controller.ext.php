@@ -74,7 +74,7 @@ class module_controller {
                 while ($app = $sql2->fetch()) {
                     $html .= '<a href="?module=zantasticox';
                     if ($_GET['cat'] === $category['cat_name']) {
-                        $html .= '&cat='.$category['ai_name'];
+                        $html .= '&cat='.$category['cat_name'];
                     }
                     $html .= '&act=view&app='.strtolower($app['app_name']).'">
                         <img src="modules/zantasticox/apps/'.strtolower($app['app_name']).'/smallicon.png" width="50" height="50" alt="'.$app['app_name'].' Icon">
@@ -250,7 +250,7 @@ class module_controller {
         // Display form
         $html .= '
             <h3>You are about to install '.$app['app_name'].'!</h3>
-            <p>This install wizard will create all the needed files and directories for '.$app['app_name'].'';if($app['ai_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
+            <p>This install wizard will create all the needed files and directories for '.$app['app_name'].'';if($app['app_db']==1){$html.=' but requires you to setup the database manually';}$html.='.
 
             <form role="form" id="zanx_installform" method="post">
               <div class="form-group">
@@ -263,9 +263,9 @@ class module_controller {
               <div class="form-group">
                 <label>Would you like to install '.$app['app_name'].' into a subfolder?</label>
                 <br>
-                <label class="ai_radio"><input type="radio" name="zanx_subfolder_toggle" value="no" id="zanx_subfolder_no" checked="yes" onchange="zanx_subfoldercheck()"> No</label>
+                <label class="zanx_radio"><input type="radio" name="zanx_subfolder_toggle" value="no" id="zanx_subfolder_no" checked="yes" onchange="zanx_subfoldercheck()"> No</label>
                 <br>
-                <label class="ai_radio"><input type="radio" name="zanx_subfolder_toggle" value="yes" id="zanx_subfolder_yes" onchange="zanx_subfoldercheck()"> Yes</label>
+                <label class="zanx_radio"><input type="radio" name="zanx_subfolder_toggle" value="yes" id="zanx_subfolder_yes" onchange="zanx_subfoldercheck()"> Yes</label>
               </div>
 
               <script>function zanx_subfoldercheck(){if(document.getElementById("zanx_subfolder_no").checked){document.getElementById("zanx_installfolder").style.display="none"}else{document.getElementById("zanx_installfolder").style.display="block"}}</script>
