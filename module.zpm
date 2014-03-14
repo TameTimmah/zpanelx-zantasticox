@@ -22,8 +22,12 @@
             margin-bottom: 15px;
         }
 
-        #zanx_topbar .pull-left, #app_topbar .pull-right {
+        #zanx_topbar .pull-left, zanx_topbar .pull-right, #zanx_topbar .form-inline {
             float:none;
+        }
+        
+        #zanx_topbar .form-inline {
+            margin-top: 15px;
         }
         
         #zanx_topbar #zanx_manage {
