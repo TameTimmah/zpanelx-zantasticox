@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this module.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 require_once '/etc/zpanel/panel/cnf/db.php';
@@ -37,7 +37,7 @@ try {
 A error occurred when deleting the \'zanx_categories\' table!
 You may need to delete it manually.
 ------------------------------------------------------------
-'.$e.'
+' . $e . '
 ';
 }
 
@@ -48,6 +48,6 @@ try {
 A error occurred when deleting the \'zanx_categories\' table!
 You may need to delete it manually.
 ------------------------------------------------------------
-'.$e.'
+' . $e . '
 ';
 }
