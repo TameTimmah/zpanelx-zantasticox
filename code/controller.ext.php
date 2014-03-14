@@ -166,17 +166,18 @@ class module_controller {
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
-        
+
+        // Ensure valid application is selected
         if ($app) {
 
-        // App HTML
-        $html .= '<div id="zanx_topbar">
+            // App HTML
+            $html .= '<div id="zanx_topbar">
             <div class="pull-left">
                 <a href="?module=zantasticox';
-        if ($_GET['cat'] !== NULL) {
-            $html .= '&cat=' . $_GET['cat'];
-        }
-        $html.='" class="btn btn-default">Return to list</a>
+            if ($_GET['cat'] !== NULL) {
+                $html .= '&cat=' . $_GET['cat'];
+            }
+            $html.='" class="btn btn-default">Return to list</a>
             </div>
             <form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
@@ -217,10 +218,10 @@ class module_controller {
                     <td>' . $app['app_version'] . '</td>
                     <td>' . $app['app_updated'] . '</td>
                     <td>';
-        if ($app['app_db'] != 1) {
-            $html.='Not ';
-        }
-        $html.='Required</td>
+            if ($app['app_db'] != 1) {
+                $html.='Not ';
+            }
+            $html.='Required</td>
                 </tr>
             </tbody>
         </table>';
@@ -239,26 +240,27 @@ class module_controller {
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
-        
+
+        // Ensure valid application is selected
         if ($app) {
-        
-        // Get user's domains
-        $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
-        $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
-        $sql2->execute();
 
-        // Add domains to dropdown
-        while ($vhost_details = $sql2->fetch()) {
-            $options .= "<option>" . $vhost_details['vh_name_vc'] . "</option>";
-        }
+            // Get user's domains
+            $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
+            $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
+            $sql2->execute();
 
-        // Display form
-        $html .= '
+            // Add domains to dropdown
+            while ($vhost_details = $sql2->fetch()) {
+                $options .= "<option>" . $vhost_details['vh_name_vc'] . "</option>";
+            }
+
+            // Display form
+            $html .= '
             <h3>You are about to install ' . $app['app_name'] . '!</h3>
             <p>This install wizard will create all the needed files and directories for ' . $app['app_name'] . '';
-        if ($app['app_db'] == 1) {
-            $html.=' but requires you to setup the database manually';
-        }$html.='.
+            if ($app['app_db'] == 1) {
+                $html.=' but requires you to setup the database manually';
+            }$html.='.
 
             <form role="form" id="zanx_installform" method="post">
               <div class="form-group">
@@ -290,10 +292,10 @@ class module_controller {
               <li>You accept all files within the install directory will be permanently deleted.</li>
               </ul>
               <a href="?module=zantasticox';
-        if ($_GET['cat'] !== NULL) {
-            $html .= '&cat=' . $_GET['cat'];
-        }
-        $html .= '&act=view&app=' . $app['app_name'] . '" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
+            if ($_GET['cat'] !== NULL) {
+                $html .= '&cat=' . $_GET['cat'];
+            }
+            $html .= '&act=view&app=' . $app['app_name'] . '" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
             </form>
         ';
         } else {
@@ -322,16 +324,19 @@ class module_controller {
         // Ensure valid domain and application are selected
         if ($app & $vhost_details) {
 
-            // Generate paths for zip extraction
-            $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+            // Generate zip path
             $zip_path = 'modules/zantasticox/apps/' . strtolower($app['app_name']) . '/archive.zip';
-            $extract_path = ctrl_options::GetOption('hosted_dir') . $account_details['username'] . '/public_html/' . str_replace(".", "_", $vhost_details['vh_name_vc']);
-            ;
-            if ($_POST['zanx_subfolder_toggle'] === 'yes') {
-                $extract_path .= '/' . str_replace(".", "_", $_POST['zanx_subfolder']);
-            }
 
             if ($zip_path) {
+                
+                // Generate install path
+                $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+                $extract_path = ctrl_options::GetOption('hosted_dir') . $account_details['username'] . '/public_html/' . str_replace(".", "_", $vhost_details['vh_name_vc']);
+
+                if ($_POST['zanx_subfolder_toggle'] === 'yes') {
+                    $subfolder = '/' . str_replace(".", "_", $_POST['zanx_subfolder']);
+                    $extract_path .= $subfolder;
+                }
                 mkdir($extract_path);
 
                 if ($extract_path) {
@@ -345,8 +350,8 @@ class module_controller {
                         $html .= '<p>Remember to create a <a href="?module=mysql_databases">database</a> and <a href="?module=mysql_users">database user</a>.</p>';
                     }
                     $html .= '
-                    <a href="#" class="btn">Return to list</a>
-                    <a href="#" class="btn btn-primary">Visit your website</a>
+                    <a href="?module=zantasticox" class="btn">Return to list</a>
+                    <a href="http://' . $vhost_details['vh_name_vc'] . $subfolder . '" class="btn btn-primary" target="_blank">Visit your website</a>
                     ';
                 } else {
                     $html .= '<p>Error - Could not find/create the install directory</p>';
