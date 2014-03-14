@@ -83,7 +83,7 @@ class module_controller {
                     </a>';
                 }
 
-                $html .= '</section">';
+                $html .= '</section>';
             }
         }
 
