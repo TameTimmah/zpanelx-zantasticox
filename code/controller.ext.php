@@ -94,8 +94,12 @@ class module_controller {
                     <option>All Applications</option>'
                 . $options .
                 '</select>
-            </div>
-            <form class="pull-right form-inline" role="form" method="get">
+            </div>';
+            $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+            if ($account_details['usergroupid'] == 1) {
+                $top_bar .= '<a href="?module=zantasticox&act=admin" class="btn btn-default" id="zanx_manage">Manage Applications</a>';
+            }
+            $top_bar .= '<form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
                     <input type="hidden" name="module" value="zantasticox">
                     <input type="hidden" name="act" value="search">
@@ -198,7 +202,7 @@ class module_controller {
         
         <div class="text-center" id="zanx_buttons">
             <a href="' . $app['app_site'] . '" target="_blank" class="btn btn-default">Visit Website</a>
-            <a href="?module=zantasticox&app=' . $app['app_name'] . '&act=install" class="btn btn-primary">Install Application</a>
+            <a href="?module=zantasticox&app=' . strtolower($app['app_name']) . '&act=install" class="btn btn-primary">Install Application</a>
         </div>
         
         <table class="table" id="zanx_details">
@@ -295,7 +299,7 @@ class module_controller {
             if ($_GET['cat'] !== NULL) {
                 $html .= '&cat=' . $_GET['cat'];
             }
-            $html .= '&act=view&app=' . $app['app_name'] . '" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
+            $html .= '&act=view&app=' . strtolower($app['app_name']) . '" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
             </form>
         ';
         } else {
@@ -328,7 +332,7 @@ class module_controller {
             $zip_path = 'modules/zantasticox/apps/' . strtolower($app['app_name']) . '/archive.zip';
 
             if ($zip_path) {
-                
+
                 // Generate install path
                 $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
                 $extract_path = ctrl_options::GetOption('hosted_dir') . $account_details['username'] . '/public_html/' . str_replace(".", "_", $vhost_details['vh_name_vc']);
@@ -345,6 +349,14 @@ class module_controller {
                     $zip->open($zip_path);
                     $zip->extractTo($extract_path);
                     $zip->close();
+
+                    $sysOS = php_uname('s');
+                    if ($sysOS == 'Linux' || $sysOS == 'Unix') {
+                        $zsudo = ctrl_options::GetOption('zsudo');
+                        exec("$zsudo chown -R ftpuser:ftpgroup " . $extract_path);
+                        exec("$zsudo chmod -R 777 " . $extract_path);
+                    }
+
                     $html .= '<h3>' . $app['app_name'] . ' installed successfully!</h3>';
                     if ($app['app_db'] == 1) {
                         $html .= '<p>Remember to create a <a href="?module=mysql_databases">database</a> and <a href="?module=mysql_users">database user</a>.</p>';
@@ -365,11 +377,22 @@ class module_controller {
         return $html;
     }
 
+    // Display admin area
+    static function getAdmin() {
+
+        $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+        if ($account_details['usergroupid'] == 1) {
+            return '<h3>Welcome to the admin area!</h3><p>This page is a work in progress...</p>';
+        } else {
+            return '<h3>Error - You have the incorrect permissions to view this page.</h3>';
+        }
+    }
+    
     // Display 404 error
     static function get404() {
 
         header("HTTP/1.0 404 Not Found");
-        return '<h1>Requested Page Not Found!</h1>';
+        return '<h3>Error - Requested Page Not Found!</h3>';
     }
 
     // Handles what is displayed
@@ -390,6 +413,9 @@ class module_controller {
         } elseif ($_GET['act'] === 'search') {
             // Show search results
             return module_controller::getSearchResults();
+        } elseif ($_GET['act'] === 'admin') {
+            // Show admin settings
+            return module_controller::getAdmin();
         } else {
             // Show 404
             return module_controller::get404();

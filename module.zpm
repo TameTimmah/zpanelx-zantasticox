@@ -1,14 +1,23 @@
 <style>
     #zanx_topbar form.form-inline input{
-        width:250px;
+        max-width:200px;
     }
-
+    
+    #zanx_topbar form{
+        min-width:275px;
+    }
+    
     #zanx_topbar {
         min-height:30px;
+        text-align: center;
     }
 
     @media (max-width: 767px) {
-
+        
+        #zanx_topbar {
+            text-align: left;
+        }
+        
         #zanx_topbar select {
             margin-bottom: 15px;
         }
@@ -16,12 +25,11 @@
         #zanx_topbar .pull-left, #app_topbar .pull-right {
             float:none;
         }
-
-        #zanx_topbar form.form-inline input{
-            width:100%;
-            max-width:250px;
+        
+        #zanx_topbar #zanx_manage {
+            display: block;
         }
-
+        
     }
 
     section.zanx_mainview a {
