@@ -162,7 +162,7 @@ class module_controller {
         global $zdbh;
 
         // Get app information
-        $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
+        $sql = $zdbh->prepare("SELECT 1 FROM zanx_apps WHERE app_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
@@ -231,7 +231,7 @@ class module_controller {
         global $zdbh;
 
         // Get app information
-        $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
+        $sql = $zdbh->prepare("SELECT 1 FROM zanx_apps WHERE app_name = :app_name");
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
