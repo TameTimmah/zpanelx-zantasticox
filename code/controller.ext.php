@@ -166,6 +166,8 @@ class module_controller {
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
+        
+        if ($app) {
 
         // App HTML
         $html .= '<div id="zanx_topbar">
@@ -222,7 +224,9 @@ class module_controller {
                 </tr>
             </tbody>
         </table>';
-
+        } else {
+            $html = '<h3>Error - Invalid application selected.</h3>';
+        }
         return $html;
     }
 
@@ -235,7 +239,9 @@ class module_controller {
         $sql->bindParam(':app_name', $_GET['app']);
         $sql->execute();
         $app = $sql->fetch();
-
+        
+        if ($app) {
+        
         // Get user's domains
         $sql2 = $zdbh->prepare("SELECT * FROM x_vhosts WHERE vh_acc_fk = :zpuid and vh_active_in='1' and vh_deleted_ts is NULL and vh_directory_vc != ''");
         $sql2->bindParam(':zpuid', $_SESSION['zpuid']);
@@ -290,6 +296,9 @@ class module_controller {
         $html .= '&act=view&app=' . $app['app_name'] . '" class="btn btn-default">Return to details</a> <button type="submit" class="btn btn-primary">Install Application</button>
             </form>
         ';
+        } else {
+            $html = '<h3>Error - Invalid application selected.</h3>';
+        }
         return $html;
     }
 
