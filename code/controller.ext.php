@@ -95,11 +95,11 @@ class module_controller {
                 . $options .
                 '</select>
             </div>';
-            $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
-            if ($account_details['usergroupid'] == 1) {
-                $top_bar .= '<a href="?module=zantasticox&act=admin" class="btn btn-default" id="zanx_manage">Manage Applications</a>';
-            }
-            $top_bar .= '<form class="pull-right form-inline" role="form" method="get">
+        $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+        if ($account_details['usergroupid'] == 1) {
+            $top_bar .= '<a href="?module=zantasticox&act=admin" class="btn btn-default" id="zanx_manage">Manage Applications</a>';
+        }
+        $top_bar .= '<form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
                     <input type="hidden" name="module" value="zantasticox">
                     <input type="hidden" name="act" value="search">
@@ -335,10 +335,10 @@ class module_controller {
 
                 // Generate install path
                 $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
-                $extract_path = ctrl_options::GetOption('hosted_dir') . $account_details['username'] . '/public_html/' . str_replace(".", "_", $vhost_details['vh_name_vc']);
+                $extract_path = ctrl_options::GetOption('hosted_dir') . $account_details['username'] . '/public_html/' . str_replace(".", "_", $vhost_details['vh_name_vc']) . '/';
 
                 if ($_POST['zanx_subfolder_toggle'] === 'yes') {
-                    $subfolder = '/' . str_replace(".", "_", $_POST['zanx_subfolder']);
+                    $subfolder = str_replace(".", "_", trim($_POST['zanx_subfolder'], '/')) . '/';
                     $extract_path .= $subfolder;
                 }
                 mkdir($extract_path);
@@ -363,7 +363,7 @@ class module_controller {
                     }
                     $html .= '
                     <a href="?module=zantasticox" class="btn">Return to list</a>
-                    <a href="http://' . $vhost_details['vh_name_vc'] . $subfolder . '" class="btn btn-primary" target="_blank">Visit your website</a>
+                    <a href="http://' . $vhost_details['vh_name_vc'] . '/' . $subfolder . '" class="btn btn-primary" target="_blank">Visit your website</a>
                     ';
                 } else {
                     $html .= '<p>Error - Could not find/create the install directory</p>';
@@ -387,7 +387,7 @@ class module_controller {
             return '<h3>Error - You have the incorrect permissions to view this page.</h3>';
         }
     }
-    
+
     // Display 404 error
     static function get404() {
 
