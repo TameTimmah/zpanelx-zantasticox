@@ -11,6 +11,6 @@ It is open source, licensed under GPLv3 or any later version.
 
 Currently this is not a fully functioning module and still requires some polishing.
 
-It is not recommended for use on a production server as many inputs are not yet validated so there is a security risk!
+It is not recommended for use on a production server.
 
 Your welcome to make a pull request to help me out :wink:
