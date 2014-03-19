@@ -382,10 +382,18 @@ class module_controller {
 
         $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
         if ($account_details['usergroupid'] == 1) {
-            return '<h3>Welcome to the admin area!</h3><p>This page is a work in progress...</p>';
+            $html .= '<div id="zanx_topbar">
+                    <div class="pull-left">
+                        <a href="?module=zantasticox" class="btn btn-default">Return to list</a>
+                    </div>
+                </div>
+                <hr>
+                <h3>Manage Applications and Categories</h3>
+                ';
         } else {
-            return '<h3>Error - You have the incorrect permissions to view this page.</h3>';
+            $html = '<h3>Error - You have the incorrect permissions to view this page.</h3>';
         }
+        return $html;
     }
 
     // Display 404 error
