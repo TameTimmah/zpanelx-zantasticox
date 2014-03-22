@@ -97,7 +97,7 @@ class module_controller {
             </div>';
         $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
         if ($account_details['usergroupid'] == 1) {
-            $top_bar .= '<a href="?module=zantasticox&act=admin" class="btn btn-default" id="zanx_manage">Manage Applications</a>';
+            $top_bar .= '<a href="?module=zantasticox&act=admin" class="btn btn-default" id="zanx_manage">Admin Area</a>';
         }
         $top_bar .= '<form class="pull-right form-inline" role="form" method="get">
                 <div class="form-group">
@@ -382,14 +382,59 @@ class module_controller {
 
         $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
         if ($account_details['usergroupid'] == 1) {
+
+            global $zdbh;
+
             $html .= '<div id="zanx_topbar">
                     <div class="pull-left">
                         <a href="?module=zantasticox" class="btn btn-default">Return to list</a>
                     </div>
                 </div>
                 <hr>
-                <h3>Manage Applications and Categories</h3>
-                ';
+                
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#general" data-toggle="tab">General</a></li>
+                  <li><a href="#applications" data-toggle="tab">Applications</a></li>
+                  <li><a href="#categories" data-toggle="tab">Categories</a></li>
+                </ul>
+                
+                <div class="tab-content" id="zanx_admin">
+                    <div class="tab-pane active" id="general">
+                    ...general
+                </div>
+                
+                <div class="tab-pane" id="applications">
+                    <table class="table table-striped" style="table-layout: fixed;">
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Version</th>
+                            <th></th>
+                        </tr>';
+            
+            // Get apps
+            $sql = $zdbh->prepare("SELECT * FROM zanx_apps");
+            $sql->execute();
+
+            // For every app
+            while ($app = $sql->fetch()) {
+                $html .= '<tr>
+                    <td>' . $app['app_name'] . '</td>
+                    <td>' . $app['app_type'] . '</td>
+                    <td>' . $app['app_version'] . '</td>
+                    <td>  <a href="#" class="btn btn-primary">Edit</a>  </td>
+                    <td>  <a href="#" class="btn btn-danger">Delete</a>  </td>
+                </tr>';
+            }
+            $html .= '
+                    </table>
+                </div>
+                
+                <div class="tab-pane" id="categories">
+                    ...categories
+                </div>
+                
+            </div>';
         } else {
             $html = '<h3>Error - You have the incorrect permissions to view this page.</h3>';
         }

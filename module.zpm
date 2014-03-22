@@ -101,6 +101,10 @@
     #zanx_installform #zanx_installfolder {
         display:none;
     }
+    
+    #zanx_admin .active {
+        color: #000;
+    }
 
 </style>
 <div class="zmodule_content panel" id="zmodule_header_<@ ModuleName @>">
