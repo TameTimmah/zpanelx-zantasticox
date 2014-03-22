@@ -422,16 +422,36 @@ class module_controller {
                     <td>' . $app['app_name'] . '</td>
                     <td>' . $app['app_type'] . '</td>
                     <td>' . $app['app_version'] . '</td>
-                    <td>  <a href="#" class="btn btn-primary">Edit</a>  </td>
-                    <td>  <a href="#" class="btn btn-danger">Delete</a>  </td>
+                    <td>  <a href="#edit" class="btn btn-primary">Edit</a> <a href="#delete" class="btn btn-danger">Delete</a>  </td>
                 </tr>';
             }
+            
             $html .= '
                     </table>
                 </div>
                 
                 <div class="tab-pane" id="categories">
-                    ...categories
+                    <table class="table table-striped" style="table-layout: fixed;">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>';
+                        
+            // Get categories
+            $sql2 = $zdbh->prepare("SELECT * FROM zanx_categories");
+            $sql2->execute();
+            
+            // For every category
+            while ($category = $sql2->fetch()) {
+                $html .= '<tr>
+                    <td>' . $category['cat_name'] . '</td>
+                    <td>' . $category['cat_desc'] . '</td>
+                    <td>  <a href="#edit" class="btn btn-primary">Edit</a> <a href="#delete" class="btn btn-danger">Delete</a>  </td>
+                </tr>';
+            }
+            
+            $html .= '</table>
                 </div>
                 
             </div>';
