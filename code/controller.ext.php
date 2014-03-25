@@ -404,6 +404,7 @@ class module_controller {
                 </div>
                 
                 <div class="tab-pane" id="applications">
+                <form method="post">
                     <table class="table table-striped" style="table-layout: fixed;">
                         <tr>
                             <th>Name</th>
@@ -422,12 +423,12 @@ class module_controller {
                     <td>' . $app['app_name'] . '</td>
                     <td>' . $app['app_type'] . '</td>
                     <td>' . $app['app_version'] . '</td>
-                    <td>  <a href="#edit" class="btn btn-primary">Edit</a> <a href="#delete" class="btn btn-danger">Delete</a>  </td>
+                    <td><button name="zanx_app" class="btn btn-primary" type="submit" value="' . $app['app_name'] . '">Edit</button></td>
                 </tr>';
             }
             
             $html .= '
-                    </table>
+                    </table></form>
                 </div>
                 
                 <div class="tab-pane" id="categories">
@@ -460,6 +461,53 @@ class module_controller {
         }
         return $html;
     }
+    
+    // Display admin area
+    static function getAdminApp() {
+        
+        $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+        if ($account_details['usergroupid'] == 1) {
+            
+            global $zdbh;
+            
+            // Get app information
+            $sql = $zdbh->prepare("SELECT * FROM zanx_apps WHERE app_name = :app_name");
+            $sql->bindParam(':app_name', $_POST['zanx_app']);
+            $sql->execute();
+            $app = $sql->fetch();
+            
+            if ($app) {
+                $html .= '<form method="post">
+                    
+                <input type="text" value="' . $app['app_name'] . '">
+                <input type="text" value="' . $app['app_type'] . '">
+                </form>
+                    
+                ';
+            } else {
+                $html = '<h3>Error - Could not find specified application.</h3>';
+            }
+            
+        } else {
+            $html = '<h3>Error - You have the incorrect permissions to view this page.</h3>';
+        }
+        
+        return $html;
+    }
+    
+    // Display admin area
+    static function getAdminCat() {
+        $account_details = ctrl_users::GetUserDetail($_SESSION['zpuid']);
+        if ($account_details['usergroupid'] == 1) {
+            
+            global $zdbh;
+            
+        } else {
+            $html = '<h3>Error - You have the incorrect permissions to view this page.</h3>';
+        }
+        
+        return $html;
+    }
 
     // Display 404 error
     static function get404() {
@@ -470,7 +518,7 @@ class module_controller {
 
     // Handles what is displayed
     static function getModuleDisplay() {
-
+        
         if ($_GET['act'] === NULL) {
             // View app list
             return module_controller::getMainView();
@@ -486,6 +534,12 @@ class module_controller {
         } elseif ($_GET['act'] === 'search') {
             // Show search results
             return module_controller::getSearchResults();
+        } elseif ($_GET['act'] === 'admin' & $_POST['zanx_app'] != NULL) {
+            // Install application
+            return module_controller::getAdminApp();
+        } elseif ($_GET['act'] === 'admin' & $_POST['zanx_cat'] != NULL) {
+            // Install application
+            return module_controller::getAdminCat();
         } elseif ($_GET['act'] === 'admin') {
             // Show admin settings
             return module_controller::getAdmin();
